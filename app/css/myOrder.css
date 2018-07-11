@@ -1,0 +1,414 @@
+.order {
+	height: 100%;
+}
+.order img {
+    max-width: 100%;
+	height: auto;
+}
+.order .category-menu {
+    float: left;
+    background: #f0f0f0;
+    width: 80px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.order .category-menu ul {
+    margin: 0;
+    padding: 0;
+    padding-top: 64px;
+    padding-bottom: 100px;
+    list-style: none;
+    background: #f0f0f0;
+}
+.order .category-menu ul li {
+    width: 78px;
+    background: #f8f8f8;
+    border-bottom: 1px solid #f0f0f0;
+    border-left: 2px solid #f8f8f8;
+    line-height: 60px;
+    font-size: 14px;
+    text-align: center;
+	cursor: pointer;
+}
+.order .category-menu ul .active {
+    border-left: 2px solid #26a2ff;
+    color: #26a2ff;
+    background-color: #fff;
+}
+.order .product-list {
+    background: #fff;
+    width: auto;
+    margin-left: 80px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 54px;
+}
+.order .search-list {
+	margin-left: 0;
+}
+@media (min-width: 769px) {
+	.order .product-list {
+		padding-top: 0;
+	}
+}
+.order .product-list ul {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 0;
+    list-style: none;
+    padding-bottom: 100px;
+}
+.order .product-list ul li {
+    width: auto;
+    padding: 10px 0;
+    min-height: 80px;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 60px;
+    font-size: 14px;
+    text-align: left;
+    position: relative;
+}
+.order .product-list ul li .img {
+    height: 60px;
+    width: 30%;
+    text-align: center;
+    vertical-align: middle;
+}
+.order .product-list ul li .img img {
+    width: 60px;
+    height: 60px;
+}
+.order .product-list ul li > div {
+    float: left;
+    vertical-align: top;
+}
+.order .product-list ul li .detail {
+    width: 70%;
+    min-height: 60px;
+}
+.order .product-list ul li .detail .name {
+    padding-right: 5px;
+    line-height: 20px;
+    height: 20px;
+}
+.order .product-list ul li .detail .name .product-name{
+    float: left;
+    width: 58%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.order .product-list ul li .detail .name .member-price{
+    float: left;
+    width: 42%;
+    text-align: right;
+    color: #f43531;
+    font-size: 12px;
+}
+.order .product-list ul li .detail .name .product-full-name{
+    width: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order .product-list ul li .detail .price {
+    width: 100%;
+    line-height: 20px;
+}
+.order .product-list ul li .detail .description-group {
+    width: 100%;
+    line-height: 30px;
+}
+.order .product-list ul li .detail .description-detail {
+    width: 100%;
+    line-height: 30px;
+	color: #33CC00;
+}
+.order .product-list ul li .detail .description-group>div{
+	display: inline-block;
+	margin-right: 10px;
+	line-height: 28px;
+	width: 40px;
+	background-color: #26a2ff;
+	text-align: center;
+	border-radius: 4px;
+	color: #ffffff;
+	cursor: pointer;
+}
+.order .product-list ul li .detail .price .promotion {
+    color: #f43531;
+    font-size: 12px;
+}
+.order .product-list ul li .detail .price .almost {
+    /*color: #ccc;*/
+    font-size: 12px;
+    text-decoration: line-through;
+}
+.order .product-list ul li .select-group {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    height: 30px;
+    vertical-align: top;
+    margin: 0;
+    padding: 0;
+}
+.order .product-list ul li .select-group button {
+	width: 60px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+.order .product-list ul li .select-group > div {
+    display: inline-block;
+    line-height: 30px;
+    vertical-align: top;
+}
+.order .product-list ul li .select-group > div img {
+    width: 30px;
+    height: 30px;
+	cursor: pointer;
+}
+.order .product-list ul li .select-group .quantity {
+    width: 30px;
+    text-align: center;
+    margin: 0 -5px;
+}
+.order-bottom {
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    bottom: 0;
+    margin-bottom: 0;
+    border-width: 1px 0 0;
+    background: #f8f8f8;
+    color: #fff;
+    height: 50px;
+    line-height: 50px;
+    border-top: 1px solid #d3d3d3;
+}
+.order-bottom .cart {
+    width: 60px;
+    height: 60px;
+    left: 10px;
+    bottom: 10px;
+    background-color: #26a2ff;
+    border: 0;
+    border-radius: 30px;
+    position: absolute;
+    overflow: hidden;
+    text-align: center;
+}
+.order-bottom .cart img {
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+    margin-top: 10px;
+}
+.order-bottom .total-count {
+    position: absolute;
+    left: 52px;
+    bottom: 52px;
+    color: #fff;
+    text-align: center;
+    line-height: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #f43531;
+}
+.order-bottom .total-price {
+    margin-left: 100px;
+    color: #555;
+    font-size: 14px;
+}
+.order-bottom .total-price .price {
+    display: inline-block;
+    font-size: 18px;
+    color: #f43531;
+    margin: 0 2px;
+}
+.order-bottom .order-button {
+    position: absolute;
+    right: 10px;
+    bottom: 0px;
+}
+.order-bottom button {
+	width: 80px;
+	margin-left: 10px;
+}
+.order .cart-list {
+    margin-left: 0;
+}
+.order .cart-list .detail {
+    margin-left: 10px;
+    width: 90%;
+}
+.null {
+	background-color: #ccc;
+}
+.order .cart-list ul li .detail .price {
+	position: absolute;
+	width: 60px;
+	right: 10px;
+	top: 10px;
+}
+.order .cart-list ul li {
+	height: auto;
+}
+.order .cart-list ul li>div{
+	float: none;
+}
+.order-bottom .total-count-text {
+    position: absolute;
+    left: 25px;
+    bottom: 0px;
+    color: #555;
+    font-size: 14px;
+}
+.order-bottom .total-count-text .count {
+    display: inline-block;
+    font-size: 18px;
+    color: #f43531;
+    margin: 0 2px;
+}
+@media (min-width: 768px) {
+	.order {
+		padding: 0 10px;
+		margin-top: 0px;
+	}
+	.order-bottom {
+		position: absolute;
+		border-bottom: 0px;
+	}
+}
+@media (max-width: 768px) {
+.order .product-list ul li .detail .progress {
+	margin: 0;
+	margin-top: 10px;
+	padding: 0;
+}
+
+.phone-no-show {
+	display: none;
+}
+}
+#standardModal .modal-body div{
+	display: block;
+	text-align: left;
+	line-height: 30px;
+}
+#standardModal .modal-body textarea{
+	width: 80%;
+	display: inline-block;
+	vertical-align: top;
+}
+#tastedModal .modal-body div{
+	display: block;
+	text-align: left;
+	line-height: 30px;
+}
+#tastedModal .modal-body textarea{
+	width: 100%;
+	display: inline-block;
+	vertical-align: top;
+}
+#tastedModal .modal-body .standard-button {
+	display: inline-block;
+	margin-right: 10px;
+	line-height: 28px;
+	padding:  0 5px;
+	background-color: #26a2ff;
+	text-align: center;
+	border-radius: 4px;
+	color: #ffffff;
+	cursor: pointer;
+	margin: 5px 0;
+}
+
+.order .product-list ul li .detail .progress {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    background-color: #ccc;
+    overflow: hidden;
+    border-radius: 4px;
+}
+.order .product-list ul li .detail .price-right {
+    line-height: 30px;
+    position: absolute;
+    right: 5px;
+    top: 10px;
+}
+.order .product-list ul li .detail .price-right button{
+	width: 50px;
+	margin-left: 10px;
+}
+.order .product-list ul li .detail .price-right button.green{
+	background-color: #5cb85c;
+	border: 1px solid #5cb85c;
+}
+.order .product-list ul li .detail .progress > div {
+    position: absolute;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+	vertical-align: top;
+	padding: 0;
+}
+.order .product-list ul li .detail .progress .no-addorder {
+    background-color: #5cb85c;
+    width: 100%;
+}
+.order .product-list ul li .detail .progress .addorder {
+    background-color: #5cb85c;
+    width: 33.3%;
+}
+.order .product-list ul li .detail .progress .no-do {
+    background-color: #cccccc;
+    width: 33.3%;
+    left: 33.3%;
+}
+.order .product-list ul li .detail .progress .do {
+    background-color: #FFCC00;
+    width: 33.3%;
+    left: 33.3%;
+}
+.order .product-list ul li .detail .progress .no-up {
+    background-color: #cccccc;
+    width: 33.3%;
+    left: 66.6%;
+}
+.order .product-list ul li .detail .progress .up {
+    background-color: #26a2ff;
+    width: 33.3%;
+    left: 66.6%;
+}
+.order .product-list ul li .detail .progress .no-product {
+    background-color: #f43531;
+    width: 100%;
+    color: #ffffff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,131 @@
+<!--<h2>创建模态框（Modal）</h2>-->
+<!-- 按钮触发模态框 -->
+<!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal22">开始演示模态框</button>-->
+<!-- 模态框（Modal） -->
+<!--<button ng-click="programBar()">22222222</button>-->
+<div class="modal fade" id="myModal_memberBirth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">会员生日提醒</h4>
+			</div>
+			<div class="modal-body">
+				<table ng-table="tableParams" class="table table-striped">
+					<thead>
+					<tr>
+						<th><a ng-click="tableParams.sorting('phone',(reverseSort = !reverseSort)?'asc':'desc')">手机号</a></th>
+						<th><a ng-click="tableParams.sorting('name',(reverseSort = !reverseSort)?'asc':'desc')">姓名</a></th>
+						<th><a ng-click="tableParams.sorting('dayToBirth',(reverseSort = !reverseSort)?'asc':'desc')">距离天数</a></th>
+
+
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="member in memberBirthList">
+						<!--<a href="#/dataentry/category/{{category.id}}">-->
+						<td class="text-center">{{member.phone}}</td>
+						<td class="text-center">{{member.name}}</td>
+						<td class="text-center" >{{member.dayToBirth==0?'今':'还剩'+ member.dayToBirth}}天</td>
+						<!--<td class="text-center sort-row">
+							<input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" class="form-control" ng-model="category.sort" ng-required="true" />
+							<button class="btn btn-primary" ng-click="saveSort(category)">保存</button>
+						</td>
+						<td class="text-center">{{category.name}}</td>
+						<td class="text-center">{{category.is_enable?"启用":"禁用"}}</td>-->
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" ng-click="remind()">下次登录前不在提醒</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+<div class="modal fade" id="myModal_programBar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">结业数据上传中>>>>>> <b>40%</b></h4>
+			</div>
+			<div class="modal-body">
+				<div class="progress progress-striped active">
+					<div class="progress-bar progress-bar-success" role="progressbar"
+						 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+						 style="width: 40%;">
+						<span class="sr-only">40% 完成</span>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+  <ng-include src="'templates/menu.html'"></ng-include>
+  <div class="col-md-10 col-xs-12 flow">
+	<div class="table-list">
+		<div class="table-title">普通桌</div>
+		<div class="table-list-body">
+			<div ng-repeat="(index,item) in diningTableList" ng-if="item.is_out==0&&item.is_enable==1" class="status{{item.status}}" ng-click="showModal(item)">
+				<div class="table-serial">{{item.name}}</div>
+				<div class="table-pointer" ng-if="item.status==3"><img src="img/add-order.png"/></div>
+				<div class="table-status" ng-if="item.status==0">空闲</div>
+				<div class="table-status" ng-if="item.status==1">开桌</div>
+				<div class="table-status" ng-if="item.status==2">进行中</div>
+				<div class="table-status" ng-if="item.status==3">加餐</div>
+			</div>
+		</div>
+		<div class="table-title">外卖桌</div>
+		<div class="table-list-body">
+			<div ng-repeat="(index,item) in diningTableList" ng-if="item.is_out==1&&item.is_enable==1" class="status{{item.status}}" ng-click="showModal(item)">
+				<div class="table-serial">{{item.name}}</div>
+				<div class="table-pointer" ng-if="item.status==3"><img src="img/add-order.png"/></div>
+				<div class="table-status" ng-if="item.status==0">空闲</div>
+				<div class="table-status" ng-if="item.status==1">开桌</div>
+				<div class="table-status" ng-if="item.status==2">进行中</div>
+				<div class="table-status" ng-if="item.status==3">加餐</div>
+			</div>
+		</div>
+	</div>
+  </div>
+	<div class="call-service-bottom">当前有 <span>{{callServiceList.length}}</span> 个呼叫服务
+      <a class="call-service-button" href="#/callService/list">
+        <button class="btn btn-primary btn-lg btn-block ">查看</button>
+      </a>
+	</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					&times;
+				</button>
+			</div>
+			<div class="modal-body">
+				<a ng-if="selectTable.status==0"><button ng-click="openTable()" id="openTable" class="btn btn-primary">开桌</button></a>
+				<a ng-if="selectTable.status==1"><button ng-click="goto('#addOrder/'+selectTable.id)" class="btn btn-primary">点餐</button></a>
+				<a ng-if="selectTable.status==3||isAdd==1"><button ng-click="orderTake()"class="btn btn-primary">接单</button></a>
+				<a ng-if="selectTable.status==2||selectTable.status==3"><button ng-click="goto('#addOrder/'+selectTable.id)" class="btn btn-primary">加餐</button></a>
+				<a ng-if="selectTable.status==2||selectTable.status==3"><button ng-click="goto('#servingList/'+selectTable.id)" class="btn btn-primary">上菜</button></a>
+				<a ng-if="selectTable.status!=0"><button ng-click="goto('#changeTable/'+selectTable.id)" class="btn btn-primary">转桌</button></a>
+				<a ng-if="selectTable.status==1"><button ng-click="clearTable()" class="btn btn-primary">清桌</button></a>
+				<a ng-if="selectTable.status==2||selectTable.status==3"><button ng-click="goto('#orderDetail/'+selectTable.id)" class="btn btn-primary">订单</button></a>
+				<a ng-if="selectTable.status!=0&&selectTable.status!=1&&nowKey==4"><button ng-click="goto('#printerOrder/'+selectTable.id)" class="btn btn-primary phone-no-show">打印</button></a>
+				<a ng-if="selectTable.status!=0&&selectTable.status!=1&&nowKey==4"><button ng-click="goto('#payOrder/'+selectTable.id)" class="btn btn-primary phone-no-show">结账</button></a>
+				<a ng-if="selectTable.status!=0&&selectTable.status!=1&&nowKey==4"><button ng-click="goto('#mergeTable/'+selectTable.id)" class="btn btn-primary phone-no-show">合并结账</button></a>
+			</div>
+			<div class="modal-footer">
+
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+</div>
