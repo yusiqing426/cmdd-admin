@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c99a3274-0da9-4096-9c19-fa555405c8b2" name="Default" comment="cmdd-admin" />
+    <list default="true" id="c99a3274-0da9-4096-9c19-fa555405c8b2" name="Default" comment="cmdd-admin">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -145,7 +147,7 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="128" />
     <option name="y" value="48" />
     <option name="width" value="1407" />
@@ -227,17 +229,17 @@
       <workItem from="1531061556739" duration="959000" />
       <workItem from="1531092244780" duration="16996000" />
       <workItem from="1531186527408" duration="8543000" />
-      <workItem from="1531205713326" duration="10246000" />
+      <workItem from="1531205713326" duration="10854000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="180725000" />
+    <option name="totallyTimeSpent" value="181333000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="128" y="48" width="1407" height="858" extended-state="1" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2954709" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2140625" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5005208" side_tool="true" weight="0.2943677" />
