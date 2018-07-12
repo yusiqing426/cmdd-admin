@@ -26,10 +26,10 @@
 		</div>
 		<div class="col-sm-1 control-label lottery-lable">菜品状态:</div>
         <div class="col-sm-2 short-label">
-          <select class="form-control" ng-model="listFilter.is_in_use">
+          <select class="form-control" ng-model="listFilter.is_in_use" >
                 <option value="">全部</option>
-				<option value="1">启用</option>
-				<option value="0">不启用</option>
+				<option value="1" ng-selected="listFilter.is_in_use==1">启用</option>
+				<option value="0" ng-selected="listFilter.is_in_use==0">不启用</option>
           </select>
         </div>
 		<a class="col-sm-offset-0 control-label  col-sm-1 middle-label">

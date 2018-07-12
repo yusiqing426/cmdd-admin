@@ -13,751 +13,878 @@ tableOperateModule.controller('tableOperateListController',
   }
   	//结业
 	$scope.test = function(){
+        //TODO:
+        //修改商鋪
 
-		//修改商鋪
-		//同步printer
-
-      //order
-       syncService.orderSyncList_local(
+        //
+        //dining_table
+        syncService.dining_tableSyncList_local(
             {id:10},
             function(response1){
-                //TODO 后端定义 arr.size的状态
-                console.log("response1");
+                console.log("dining_tableSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-						syncService.orderInsertById_remote(
-							Things[i],
-							function(response3){
-								if(response3==200){
-									//console.log("response3---200")
-								}else{
-									//console.log("response3---500")
-								}
-							}
-						)
-                        var syncData = {
-                            id:Things[i].id,
-                            sync_status:1
-                        }
-                        syncService.orderInsertById_local(
-                            syncData,
-                            function(response2){
-                                if(response2==200){
-                                    //console.log("response2---200")
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.dining_tableInsertById_remote(
+                            syncList[i],
+                            function(response3){
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("dining_tableInsertById_remote---response3---200")
                                 }else{
-                                    //console.log("response2---500")
+                                    console.log("dining_tableInsertById_remote---response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
+                        )
+
+                        syncService.dining_tableUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("dining_tableUpdateSync_status_remote---response4---200")
+                                }else{
+                                    console.log("dining_tableUpdateSync_status_remote---response4---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+
                         )
                     }
                 }else{
-                    console.log("lotterService.syncList --- fail")
+                    console.log("dining_table --- fail")
                 }
             }
         )
-		//orderItem
-        syncService.orderItemSyncList_local(
+        //category
+        syncService.categorySyncList_local(
             {id:10},
             function(response1){
-                //TODO 后端定义 arr.size的状态
-                console.log("response1");
+                console.log("categorySyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    for (var i = 0; i < Things.length; i++) {
-                        syncService.orderItemInsertById_remote(
-                            Things[i],
+                    var syncList = response1.msg;
+
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.categoryInsertById_remote(
+                            syncList[i],
                             function(response3){
-                                if(response3==200){
-                                    //console.log("response3---200")
+                                console.log("response3 ------ ");
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("categorySyncList_local---response3---200")
                                 }else{
-                                    //console.log("response3---500")
+                                    console.log("categorySyncList_local---response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-                        var syncData = {
-                            id:Things[i].id,
-                            sync_status:1
-                        }
-                        syncService.orderItemInsertById_locals(
-                            syncData,
-                            function(response2){
-                                if(response2==200){
-                                    //console.log("response2---200")
+                        syncService.categoryUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log("response4 ------ ");
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("categoryUpdateSync_status_remote---response4---200")
                                 }else{
-                                    //console.log("response2---500")
+                                    console.log("categoryUpdateSync_status_remote---response4---500")
                                 }
+                            },
+                             function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("orderItemI --- fail")
+                    console.log("category ---- fail")
                 }
             }
         )
-        $('#myModal_programBar').modal('show');
-       /* syncService.staffSyncList(
+        //product
+        syncService.productSyncList_local(
             {id:10},
             function(response1){
-                console.log("response1");
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
+                    for (var i = 0; i < syncList.length; i++) {
 
+                        syncList[i].sync_status=1;
 
-
-                        syncService.staffCreateOrUpdate(
-                            Things[i],
+                        syncService.productInsertById_remote(
+                            syncList[i],
                             function(response3){
-                                if(response3==200){
+                                console.log(response3)
+                                if(response3.code==200){
                                     console.log("response3---200")
                                 }else{
                                     console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-
-
-                        Things[i].sync_status=10;
-                        syncService.staffCreateOrUpdate(
-                            Things[i],
-                            function(response2){
-                                if(response2==200){
-                                    console.log("response2---200")
+                        syncService.productUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
                                 }else{
-                                    console.log("response2---500")
+                                    console.log("response4---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("lotterService.syncList --- fail")
+                    console.log("product ---- fail")
                 }
             }
         )
-        syncService.memberSyncList(
+        //iamge
+        syncService.imageSyncList_local(
             {id:10},
             function(response1){
-                console.log("response1");
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
-                        syncService.memberCreateOrUpdate_remote(
-                            Things[i],
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.imageInsertById_remote(
+                            syncList[i],
                             function(response3){
+                                console.log(response3)
                                 if(response3.code==200){
-                                    console.log("200");
+                                    console.log("response3---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response3);
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-                        Things[i].sync_status=10;
-                        syncService.memberCreateOrUpdate(
-                            Things[i],
-                            function(response2){
-                                if(response2.code==200){
-                                    console.log("200");
+                        syncService.imageUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response2);
+                                    console.log("response4---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("未获取到数据")
+                    console.log("product ---- fail")
                 }
             }
         )
-        syncService.memberIntegralSyncList(
+        //kitchen
+        syncService.kitchenSyncList_local(
             {id:10},
             function(response1){
-                console.log("response1");
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
-                        syncService.memberIntegralCreateOrUpdate_remote(
-                            Things[i],
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.kitchenInsertById_remote(
+                            syncList[i],
                             function(response3){
+                                console.log(response3)
                                 if(response3.code==200){
-                                    console.log("200");
+                                    console.log("response3---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response3);
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-                        Things[i].sync_status=10;
-                        syncService.memberIntegralCreateOrUpdate(
-                            Things[i],
-                            function(response2){
-                                if(response2.code==200){
-                                    console.log("200");
+                        syncService.kitchenUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response2);
+                                    console.log("response4---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("未获取到数据")
+                    console.log("product ---- fail")
                 }
             }
         )
-
-        syncService.memberLotteryLogSyncList(
+        //lottery
+        syncService.lotterySyncList_local(
             {id:10},
             function(response1){
-                console.log("response1");
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
-                        syncService.memberLotteryLogCreateOrUpdate_remote(
-                            Things[i],
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.lotteryInsertById_remote(
+                            syncList[i],
                             function(response3){
+                                console.log(response3)
                                 if(response3.code==200){
-                                    console.log("200");
+                                    console.log("response3---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response3);
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-                        Things[i].sync_status=10;
-                        syncService.memberLotteryLogCreateOrUpdate(
-                            Things[i],
-                            function(response2){
-                                if(response2.code==200){
-                                    console.log("200");
+                        syncService.lotteryUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response2);
+                                    console.log("response4---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("未获取到数据")
+                    console.log("product ---- fail")
                 }
             }
         )
-        syncService.memberCardSyncList(
+        //printer
+        syncService.printerSyncList_local(
             {id:10},
             function(response1){
-                console.log("response1");
+                console.log("printerSyncList_local --- respnse1")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
-                        syncService.memberCardCreateOrUpdate_remote(
-                            Things[i],
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.printerInsertById_remote(
+                            syncList[i],
                             function(response3){
+                                console.log(response3)
                                 if(response3.code==200){
-                                    console.log("200");
+                                    console.log("printerInsertById_remote --- response3---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response3);
+                                    console.log("printerInsertById_remote --- response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-                        Things[i].sync_status=10;
-                        syncService.memberCardCreateOrUpdateLocal(
-                            Things[i],
-                            function(response2){
-                                if(response2.code==200){
-                                    console.log("200");
+                        syncService.printerUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("printerUpdateSync_status_local --- response4---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response2);
+                                    console.log("printerUpdateSync_status_local --- response4---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("未获取到数据")
+                    console.log("product ---- fail")
                 }
             }
         )
-        syncService.memberRechargeLogSyncList(
+        //staff
+        syncService.staffSyncList_local(
             {id:10},
             function(response1){
-                console.log("response1");
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
-                        syncService.memberRechargeLogCreateOrUpdate_remote(
-                            Things[i],
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.staffInsertById_remote(
+                            syncList[i],
                             function(response3){
+                                console.log(response3)
                                 if(response3.code==200){
-                                    console.log("200");
+                                    console.log("response3---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response3);
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-                        Things[i].sync_status=10;
-                        syncService.memberRechargeLogCreateOrUpdate(
-                            Things[i],
-                            function(response2){
-                                if(response2.code==200){
-                                    console.log("200");
+                        syncService.staffUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response2);
+                                    console.log("response4---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("未获取到数据")
+                    console.log("product ---- fail")
                 }
             }
         )
-        syncService.staffSyncList(
+        //user
+        syncService.userSyncList_local(
             {id:10},
             function(response1){
-                console.log("response1");
+                console.log("userSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
-                        syncService.staffCreateOrUpdate_remote(
-                            Things[i],
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.userInsertById_remote(
+                            syncList[i],
                             function(response3){
+                                console.log(response3)
                                 if(response3.code==200){
-                                    console.log("200");
+                                    console.log("userInsertById_remote ---- response3---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response3);
+                                    console.log("userInsertById_remote --- response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-                        Things[i].sync_status=10;
-                        syncService.staffCreateOrUpdate(
-                            Things[i],
-                            function(response2){
-                                if(response2.code==200){
-                                    console.log("200");
+                        syncService.userUpdateSync_status_local(
+                            {id: syncList[i].user_id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("userInsertById_remote --- response4---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response2);
+                                    console.log("userInsertById_remote ---- response4---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("未获取到数据")
+                    console.log("product ---- fail")
                 }
             }
         )
-        syncService.userSyncList(
+      //order
+        syncService.orderSyncList_local(
             {id:10},
             function(response1){
-                console.log("response1");
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
-                        syncService.userCreateOrUpdate_remote(
-                            Things[i],
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.orderInsertById_remote(
+                            syncList[i],
                             function(response3){
+                                console.log(response3)
                                 if(response3.code==200){
-                                    console.log("200");
+                                    console.log("response3---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response3);
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
 
                         )
-                        Things[i].sync_status=10;
-                        syncService.userCreateOrUpdate(
-                            Things[i],
-                            function(response2){
-                                if(response2.code==200){
-                                    console.log("200");
+                        syncService.orderUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
                                 }else{
-                                    console.log("500");
-                                    console.log(response2);
+                                    console.log("response4---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
+
                     }
                 }else{
-                    console.log("未获取到数据")
+                    console.log("product ---- fail")
                 }
             }
         )
-        PrinterService.syncList(
+      //orderItem
+        syncService.orderItemSyncList_local(
             {id:10},
             function(response1){
-                //TODO 后端定义 arr.size的状态
-                console.log("response1");
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
+                    for (var i = 0; i < syncList.length; i++) {
 
-                        if(sync_status==11){
+                        syncList[i].sync_status=1;
 
-                            PrinterService.remoteCreate(
-                                Things[i],
-                                function(response3){
-                                    if(response3==200){
-                                        //console.log("response3---200")
-                                    }else{
-                                        //console.log("response3---500")
-                                    }
-                                }
-
-                            )
-                        }else if(sync_status==12){
-
-                            PrinterService.remoteUpdate(
-                                Things[i],
-                                function(response4){
-                                    if(response3==200){
-                                        //console.log("response4---200")
-                                    }else{
-                                        //console.log("response4---500")
-                                    }
-                                }
-
-                            )
-                        }
-                        Things[i].sync_status=10;
-                        PrinterService.update(
-                            Things[i],
-                            function(response2){
-                                if(response2==200){
-                                    //console.log("response2---200")
+                        syncService.orderItemInsertById_remote(
+                            syncList[i],
+                            function(response3){
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("response3---200")
                                 }else{
-                                    //console.log("response2---500")
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+
+                        )
+                        syncService.orderItemUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
+                                }else{
+                                    console.log("response4---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
 
-
                     }
-
-
                 }else{
-                    console.log("PrinterService.syncList --- fail")
+                    console.log("product ---- fail")
                 }
             }
         )
-
-        lotteryService.syncList(
+        //member
+        syncService.memberSyncList_local(
             {id:10},
             function(response1){
-                //TODO 后端定义 arr.size的状态
-                console.log("response1");
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        var sync_status = Things[i].sync_status;
+                    for (var i = 0; i < syncList.length; i++) {
 
-                        if(sync_status==11){
+                        syncList[i].sync_status=1;
 
-                            lotteryService.remoteCreate(
-                                Things[i],
-                                function(response3){
-                                    if(response3==200){
-                                        //console.log("response3---200")
-                                    }else{
-                                        //console.log("response3---500")
-                                    }
-                                }
-
-                            )
-                        }else if(sync_status==12){
-
-                            lotteryService.remoteUpdate(
-                                Things[i],
-                                function(response4){
-                                    if(response4==200){
-                                        //console.log("response4---200")
-                                    }else{
-                                        //console.log("response4---500")
-                                    }
-                                }
-
-                            )
-                        }
-                        Things[i].sync_status=10;
-                        lotteryService.update(
-                            Things[i],
-                            function(response2){
-                                if(response2==200){
-                                    //console.log("response2---200")
+                        syncService.memberInsertById_remote(
+                            syncList[i],
+                            function(response3){
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("response3---200")
                                 }else{
-                                    //console.log("response2---500")
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+
+                        )
+                        syncService.memberUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
+                                }else{
+                                    console.log("response4---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
 
-
                     }
-
-
                 }else{
-                    console.log("lotterService.syncList --- fail")
+                    console.log("product ---- fail")
                 }
             }
         )
-        Dining_tableService.localSyncList(
+        //memberCard
+        syncService.memberCardSyncList_local(
             {id:10},
             function(response1){
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        //var sync_status = Things[i].is_upload;
+                    for (var i = 0; i < syncList.length; i++) {
 
-                        if(sync_status==11){
+                        syncList[i].sync_status=1;
 
-                            Dining_tableService.remoteCreate(
-                                Things[i],
-                                function(response3){
-                                    console.log(response3)
-                                    if(response3==200){
-                                        console.log("response3---200")
-                                    }else{
-                                        console.log("response3---500")
-                                    }
-                                },
-                                function (err) {
-                                    console.log(err)
-                                }
-
-                            )
-                        }else if(sync_status==12){
-
-                            Dining_tableService.remoteUpdate(
-                                Things[i],
-                                function(response4){
-                                    if(response4==200){
-                                        console.log("response4---200")
-                                    }else{
-                                        console.log("response4---500")
-                                    }
-                                },
-                                function (err) {
-                                    console.log(err)
-                                }
-
-                            )
-                        }
-                       // Things[i].is_upload=10;
-                        Dining_tableService.update(
-                            Things[i],
-                            function(response2){
-                                console.log(response2)
-                                if(response2==200){
-                                    console.log("response2---200")
+                        syncService.memberCardInsertById_remote(
+                            syncList[i],
+                            function(response3){
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("response3---200")
                                 }else{
-                                    console.log("response2---500")
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+
+                        )
+                        syncService.memberCardUpdateSync_status_local(
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
+                                }else{
+                                    console.log("response4---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
 
-
                     }
-
-
                 }else{
-                    console.log("Dining_tableService.syncList --- fail")
+                    console.log("product ---- fail")
                 }
             }
         )
-        CategoryService.localSyncList(
+        //memberIntegral
+        syncService.memberIntegralSyncList_local(
             {id:10},
             function(response1){
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                        //var sync_status = Things[i].is_upload;
+                    for (var i = 0; i < syncList.length; i++) {
 
-                        if(sync_status==11){
+                        syncList[i].sync_status=1;
 
-                            CategoryService.remoteCreate(
-                                Things[i],
-                                function(response3){
-                                    console.log(response3)
-                                    if(response3==200){
-                                        console.log("response3---200")
-                                    }else{
-                                        console.log("response3---500")
-                                    }
-                                },
-                                function (err) {
-                                    console.log(err)
-                                }
-
-                            )
-                        }else if(sync_status==12){
-
-                            CategoryService.remoteUpdate(
-                                Things[i],
-                                function(response4){
-                                    if(response4==200){
-                                        console.log("response4---200")
-                                    }else{
-                                        console.log("response4---500")
-                                    }
-                                },
-                                function (err) {
-                                    console.log(err)
-                                }
-
-                            )
-                        }
-                       // Things[i].is_upload=10;
-                        CategoryService.update(
-                            Things[i],
-                            function(response2){
-                                console.log(response2)
-                                if(response2==200){
-                                    console.log("response2---200")
+                        syncService.memberIntegralInsertById_remote(
+                            syncList[i],
+                            function(response3){
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("response3---200")
                                 }else{
-                                    console.log("response2---500")
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+
+                        )
+                        syncService.memberIntegralUpdateSync_status_local(
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
+                                }else{
+                                    console.log("response4---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
 
-
                     }
-
-
                 }else{
-                    //console.log("Dining_tableService.syncList --- fail")
+                    console.log("product ---- fail")
                 }
             }
         )
-        ProductService.localSyncList(
+        //memberLottery
+        syncService.memberLotterySyncList_local(
             {id:10},
             function(response1){
+                console.log("productSyncList_local --- ")
                 console.log(response1);
                 if(response1.code==200&&response1.msg.length>0){
 
-                    var Things = response1.msg;
+                    var syncList = response1.msg;
 
-                    for (var i = 0; i < Things.length; i++) {
-                     //   var sync_status = Things[i].is_upload;
+                    for (var i = 0; i < syncList.length; i++) {
 
-                        if(sync_status==11){
+                        syncList[i].sync_status=1;
 
-                            ProductService.remoteCreate(
-                                Things[i],
-                                function(response3){
-                                    console.log(response3)
-                                    if(response3==200){
-                                        console.log("ProductService---response3---200")
-                                    }else{
-                                        console.log("ProductService---response3---500")
-                                    }
-                                },
-                                function (err) {
-                                    console.log(err)
-                                }
-
-                            )
-                        }else if(sync_status==12){
-
-                            ProductService.remoteUpdate(
-                                Things[i],
-                                function(response4){
-                                    if(response4==200){
-                                        console.log("ProductService---response4---200")
-                                    }else{
-                                        console.log("ProductService---response4---500")
-                                    }
-                                },
-                                function (err) {
-                                    console.log(err)
-                                }
-
-                            )
-                        }
-                     //   Things[i].is_upload=10;
-                        ProductService.update(
-                            Things[i],
-                            function(response2){
-                                console.log(response2)
-                                if(response2==200){
-                                    console.log("ProductService---response2---200")
+                        syncService.memberLotteryInsertById_remote(
+                            syncList[i],
+                            function(response3){
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("response3---200")
                                 }else{
-                                    console.log("ProductService---response2---500")
+                                    console.log("response3---500")
                                 }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+
+                        )
+                        syncService.memberLotteryUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
+                                }else{
+                                    console.log("response4---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
                             }
                         )
 
-
                     }
-
-
                 }else{
-                    //console.log("Dining_tableService.syncList --- fail")
+                    console.log("product ---- fail")
                 }
             }
-        )*/
-        }
+        )
+        //memberRechargeLog
+        syncService.memberRechargeLogSyncList_local(
+            {id:10},
+            function(response1){
+                console.log("productSyncList_local --- ")
+                console.log(response1);
+                if(response1.code==200&&response1.msg.length>0){
+
+                    var syncList = response1.msg;
+
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.memberRechargeLogInsertById_remote(
+                            syncList[i],
+                            function(response3){
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("response3---200")
+                                }else{
+                                    console.log("response3---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+
+                        )
+                        syncService.memberRechargeLogUpdateSync_status_local(
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("response4---200")
+                                }else{
+                                    console.log("response4---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+                        )
+
+                    }
+                }else{
+                    console.log("product ---- fail")
+                }
+            }
+        )
+        //shop
+        syncService.shopSyncList_local(
+            {id:10},
+            function(response1){
+                console.log("productSyncList_local --- ")
+                console.log(response1);
+                if(response1.code==200&&response1.msg.length>0){
+
+                    var syncList = response1.msg;
+
+                    for (var i = 0; i < syncList.length; i++) {
+
+                        syncList[i].sync_status=1;
+
+                        syncService.shopInsertById_remote(
+                            syncList[i],
+                            function(response3){
+                                console.log(response3)
+                                if(response3.code==200){
+                                    console.log("shopInsertById_remote ---- response3---200")
+                                }else{
+                                    console.log("shopInsertById_remote ----response3---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+
+                        )
+                        syncService.shopUpdateSync_status_local(
+                            {id: syncList[i].id},
+                            syncList[i],
+                            function(response4){
+                                console.log(response4);
+                                if(response4.code==200){
+                                    console.log("shopUpdateSync_status_local --- response4---200")
+                                }else{
+                                    console.log("shopUpdateSync_status_local ---response4---500")
+                                }
+                            },
+                            function (err) {
+                                console.log(err)
+                            }
+                        )
+
+                    }
+                }else{
+                    console.log("product ---- fail")
+                }
+            }
+        )
+        alert("正在上传结业数据");
+    }
 
 
 	$scope.nowKey = localStorage.getItem('now_keys');
@@ -791,7 +918,7 @@ tableOperateModule.controller('tableOperateListController',
 		},
 		function (error) {}
 	);
-
+	//loop
 	var tableInitialization = function(){
 		tableOperateService.tableList({},
 			function (response) {
@@ -845,6 +972,7 @@ tableOperateModule.controller('tableOperateListController',
                 function (response) {
                     if(response.code==200){
                         $scope.memberBirthList = response.msg;
+                        console.log("$scope.memberBirthList ------ ");
                         console.log( $scope.memberBirthList )
                         if($scope.memberBirthList.length>0)$('#myModal_memberBirth').modal('show')
                     }
@@ -1094,7 +1222,7 @@ tableOperateModule.controller('addOrderController', [ '$scope','$location','$rou
 					alert('获取订单详情失败')
 					return
 				}
-                console.log(response)
+               // console.log(response)
                 var orderDetail  = response.msg;
 
 
@@ -1152,8 +1280,8 @@ tableOperateModule.controller('addOrderController', [ '$scope','$location','$rou
 		);
 	};
 	$scope.increaseCount = function(id){
-
-        console.log("---1180")
+		console.log("=====")
+		console.log(localStorage.getItem("shop_id"))
 	    console.log($scope.orderDetail)
 		for (var i = $scope.productList.length - 1; i >= 0; i--) {
 			if ($scope.productList[i].id==id) {
@@ -1165,9 +1293,11 @@ tableOperateModule.controller('addOrderController', [ '$scope','$location','$rou
 					quantity: 1,
 					status_id: 0,
 					is_lottery: 0,
-					description: ''
+					description: '',
+					shopId:localStorage.getItem("shop_id")
 				};
-				tableOperateService.orderProductCreate(data,
+				tableOperateService.orderProductCreate(
+					data,
 					function (response) {
 						if (response.code != 200) {
 						    console.log(response);
@@ -1189,6 +1319,8 @@ tableOperateModule.controller('addOrderController', [ '$scope','$location','$rou
 		}
 	};
 	$scope.decreaseCount = function(id){
+        console.log("=====")
+        console.log(localStorage)
 		for (var i = $scope.productList.length - 1; i >= 0; i--) {
 			if ($scope.productList[i].id==id) {
 				for(var j=0;j<$scope.orderDetail.loi.length;j++){
@@ -1407,8 +1539,8 @@ tableOperateModule.controller('searchListController', [ '$scope','$location','$r
 					quantity: 1,
 					status_id: 0,
 					is_lottery: 0,
-					description: ''//,
-					//sync_status:11
+					description: '',
+					shopId:localStorage.getItem("shop_id")
 				};
 				tableOperateService.orderProductCreate(data,
 					function (response) {
@@ -1709,7 +1841,8 @@ tableOperateModule.controller('takingOrderListController', [ '$scope','$location
 		}else{
 			return false;
 		}
-		tableOperateService.orderDetail({id:$routeParams.tableId},
+		tableOperateService.orderDetail(
+			{id:$routeParams.tableId},
 			function (response) {
 				if (response.code == 500) {
 					alert('获取订单详情失败')
@@ -3265,7 +3398,7 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 					LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
 				}	
 
-				var isFreeSingleOrIsBill= orderList[0].pay_type==120?"免单支付":orderList[0].pay_type==130?"挂账支付":false;
+				var isFreeSingleOrIsBill= orderList[0].pay_type==120?"免单支付":$scope.payType = 130?"挂账支付":false;
 				if(isFreeSingleOrIsBill){
 					top+=4;
 					LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
@@ -3305,8 +3438,9 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 
 				top+=4;
 				LODOP.ADD_PRINT_TEXT(top+"mm","1mm","100%","6mm","服务热线：400－0217－123");
-		
+		        //dev
 				LODOP.PREVIEW();
+
 				//LODOP.PRINT();
 				       	
             }else{
@@ -3355,377 +3489,27 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
             discountPreferentialMoney: $scope.discountPreferentialMoney
 		};
 		
-		tableOperateService.orderPay(data,function (response) {
-			if (response.code != 200) {
-					alert(response.msg);
-					return;
-				}
-				window.location.href="#tableOperate/list";
-			},
-			function (error) {
-				alert('结账失败');
-			}
+		tableOperateService.orderPay(
+		    data,
+            function (response) {
+                if (response.code != 200) {
+                        alert(response.msg);
+                        return;
+                }
+                window.location.href="#tableOperate/list";
+             },
+            function (error) {
+		        console.log("error ------ ");
+		        console.log(error)
+                alert('结账失败');
+            }
 		);
-		
-	}
+	    }
 	//dev
 	console.log("打印预打单");	
-	//打印预打单
-	/*$scope.printPay =function(){
-		PrinterService.getPrinterByPrinter_type(
-			{printer_type:999},
-			function(response){
-				if(response.code==200){
 
-					var nowTime = DataUtilService.getNowTime();
-					var printer = response.msg;
-
-					var LODOP= getCLodop();	
-					LODOP.SET_LICENSES("","3E893A594C00D5D9C1DBE7CD18C9E8DB","C94CEE276DB2187AE6B65D56B3FC2848","");								
-					LODOP.PRINT_INITA(1,1,700,600,'商铺'+localStorage.getItem('shop_id')+'_预打单');
-
-					var printer_name = printer.name;
-
-					var pageWidth = printer.page_width;					
-					if(pageWidth==null||pageWidth==0){
-						alert("纸张宽度不能为空或零");
-						return;
-					}
-					LODOP.SET_PRINT_PAGESIZE(3, pageWidth+"mm","","");
-				
-					var flag = LODOP.SET_PRINTER_INDEXA(printer_name);									
-					if (flag) {																
-						var top = 1;	
-						LODOP.ADD_PRINT_TEXT(top+"mm","4mm",pageWidth+"mm","8mm","预打单");
-						LODOP.SET_PRINT_STYLEA(0,"Bold",1);
-						LODOP.SET_PRINT_STYLEA(0,"Horient",2);
-						LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-						LODOP.SET_PRINT_STYLEA(0,"FontSize",15);
-
-					
-						top+=5;
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","6mm","订单编号:"+$scope.orderList[0].order_no);
-
-						top+=5;
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","6mm","收款员:"+localStorage.getItem("name"));	
-						
-						top+=5;
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","6mm","结账时间:"+nowTime);
-
-						top+=5;				
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - -- - - - - - - - -- - -- - ");
-
-						
-						
-						top+=5;
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","6mm","品名");
-						LODOP.ADD_PRINT_TEXT(top+"mm","42%","100%","6mm","单价");										
-						LODOP.ADD_PRINT_TEXT(top+"mm","62%","100%","6mm","数量");
-						LODOP.ADD_PRINT_TEXT(top+"mm","81%","100%","6mm","金额");
-
-						 
-						var orderList = $scope.orderList;
-						console.log("$scope.orderList")
-						console.log($scope.orderList);
-						console.log(" ")
-						var totalMemberPrice = 0.00;
-						for (var k = 0; k < orderList.length; k++) {
-							
-							var orderItemList = orderList[k].loi; 			
-							function compare(property){
-								return function(a,b){
-									var value1 = a[property];
-									var value2 = b[property];
-									return value1 - value2;
-								}
-							}
-							orderItemList.sort(compare('category_id'));
-
-							var orderItemListCategoryId = []
-							var orderItemList_categoryId = [];					
-							for (var i = 0; i < orderItemList.length; i++) {
-								if(i==0||orderItemList[i].category_id == orderItemList[i-1].category_id){
-
-									orderItemListCategoryId.push(orderItemList[i]);
-									
-								}else{
-
-									orderItemList_categoryId.push(orderItemListCategoryId);
-
-									orderItemListCategoryId = [];
-
-									orderItemListCategoryId.push(orderItemList[i]);
-
-								}
-								if(i==orderItemList.length-1)orderItemList_categoryId.push(orderItemListCategoryId)						
-							}
-							
-
-							top+=5;
-							LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-							
-							top+=5;
-							LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","4mm", "桌位:"+orderList[k].serial_id+(orderList.length>1&&k==0?"[主订单]":""));
-
-							
-							for (var i = 0; i < orderItemList_categoryId.length; i++) {
-								top+=6;										
-								LODOP.ADD_PRINT_TEXT(top+"mm","5%","100%","4mm",orderItemList_categoryId[i][0].category_name);
-								LODOP.SET_PRINT_STYLEA(0,"Bold",1);
-								for(var j = 0; j < orderItemList_categoryId[i].length; j++){									
-									top+=6;
-									var orderItem = orderItemList_categoryId[i][j];					
-									var product = orderItemList_categoryId[i][j].p;				
-									
-
-									LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm",product.name);
-									LODOP.ADD_PRINT_TEXT(top+"mm","55%","100%","4mm",product.is_promotion==1?product.promotion_price:product.unit_price);
-									LODOP.ADD_PRINT_TEXT(top+"mm","67%","100%","4mm",orderItem.quantity);
-									LODOP.ADD_PRINT_TEXT(top+"mm","79%","100%","4mm",
-											orderItem.is_lottery==1?"赠送":
-												orderItem.status_id==6?'退菜':
-													orderItem.status_id==7?'断货':
-														product.is_promotion==1?(product.promotion_price*orderItem.quantity).toFixed(2):(product.unit_price*orderItem.quantity).toFixed(2)
-										);                                                         
-									if(product.is_promotion){
-
-										totalMemberPrice+=product.promotion_price*orderItem.quantity;	
-
-									}else if(product.isUseMemberPrice){
-
-										totalMemberPrice+=product.memberPrice*orderItem.quantity;	
-
-									}else{
-										totalMemberPrice+=product.unit_price*orderItem.quantity;	
-									}
-								}									
-							}
-							
-							if($scope.tableInf.is_out==0&&shop.service_charge!=null&&shop.service_charge!=0){	
-								top+=6;							
-								LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","服务费");											
-								LODOP.ADD_PRINT_TEXT(top+"mm","55%","100%","4mm",shop.service_charge);
-								LODOP.ADD_PRINT_TEXT(top+"mm","67%","100%","4mm","1");
-								LODOP.ADD_PRINT_TEXT(top+"mm","79%","100%","4mm",shop.service_charge);
-							}											
-						}																				
-						
-
-						top+=6;									
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - - - - - - - - - - - - -");
-						
-						top+=4;										
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","4mm","合计: "+$scope.payable);
-
-						top+=4;										
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","4mm","会员合计: "+totalMemberPrice.toFixed(2));
-
-
-						top+=4;									
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - - - - - - - - - - - - -");
-					
-						top+=4;
-						LODOP.ADD_PRINT_TEXT(top+"mm","1mm","100%","4mm","商铺名称:"+shop.shop_name);
-
-						top+=4;
-						LODOP.ADD_PRINT_TEXT(top+"mm","1mm","100%","4mm","联系方式:"+shop.phone);
-																									
-						//LODOP.PREVIEW();								
-						LODOP.PRINT();
-
-					}else{
-						alert("对应名称打印设备不存在");
-					}									
-				}else{
-					alert("获取对应打印机名称失败");
-				}
-			}
-		)
-	}*/
 	$scope.printPay = function(){
-		/*var printerList = [];
-		var orderItemList = [];
-		$("input[name='isPrinter']").each(function() {
-			if ($(this).prop('checked') ==true) {
-				printerList.push($scope.productList[$(this).val()]);
-				
-			}
-		});*/
-		/*var printerList = [];
-		for (var i = 0; i < $scope.orderList.length; i++) {
-			printerList = printerList.concat($scope.orderList[i].loi);
-		}*/
 
-		/*console.log("printerList")
-		console.log(printerList)
-		console.log(" ")
-		
-
-		var orderItemList = printerList;
-		console.log(orderItemList)
-		//排序
-		function compare(property){
-		    return function(a,b){
-		        var value1 = a[property];
-		        var value2 = b[property];
-		        return value1 - value2;
-		    }
-		}
-		orderItemList.sort(compare('category_id'));
-
-		var total = 0.00 ;
-		var	payable = 0.00 ;
-		//category分组
-		var category_orderItemList = []
-		var orderItemList_category = [];
-			
-		for (var i = 0; i < orderItemList.length; i++) {
-			
-			if(i==0||orderItemList[i].category_id == orderItemList[i-1].category_id){
-
-				
-				category_orderItemList.push(orderItemList[i]);
-				
-				if(i==orderItemList.length-1){
-					category_orderItemList.sort(compare('product_id'));
-					orderItemList_category.push(category_orderItemList);
-				}
-				
-				
-				total   += orderItemList[i].p.is_promotion==1?orderItemList[i].quantity*orderItemList[i].p.promotion_price:orderItemList[i].quantity*orderItemList[i].p.unit_price
-				if(orderItemList[i].is_lottery!=1&&orderItemList[i].status_id!=6&&orderItemList[i].status_id!=7){
-					payable += orderItemList[i].p.is_promotion==1?orderItemList[i].quantity*orderItemList[i].p.promotion_price:orderItemList[i].quantity*orderItemList[i].p.unit_price		
-				}
-																	
-			}else{
-					
-				total   += orderItemList[i].p.is_promotion==1?orderItemList[i].quantity*orderItemList[i].p.promotion_price:orderItemList[i].quantity*orderItemList[i].p.unit_price
-				if(orderItemList[i].is_lottery!=1&&orderItemList[i].status_id!=6&&orderItemList[i].status_id!=7){
-					payable += orderItemList[i].p.is_promotion==1?orderItemList[i].quantity*orderItemList[i].p.promotion_price:orderItemList[i].quantity*orderItemList[i].p.unit_price		
-				}
-
-				category_orderItemList.sort(compare('product_id'));
-				orderItemList_category.push(category_orderItemList);
-				category_orderItemList=[];
-
-				category_orderItemList.push(orderItemList[i]);
-
-				if(i==orderItemList.length-1)orderItemList_category.push(category_orderItemList);
-				
-				
-							
-			}														
-		}
-		console.log(orderItemList_category)
-
-		var orderItemList_category_productId =[];		
-		for (var i = 0; i < orderItemList_category.length; i++) {
-								
-			var productId_orderItemList = [];
-			var orderItemList_categoryProductId = [];
-
-			var orderItemList_category_productIdNormal = []
-			//商品ID分组
-			for (var j = 0; j < orderItemList_category[i].length;j++) {
-							
-				if(j==0||orderItemList_category[i][j].product_id==orderItemList_category[i][j-1].product_id){
-
-					if(orderItemList_category[i][j].is_lottery!=1&&orderItemList_category[i][j].status_id!=6&&orderItemList_category[i][j].status_id!=7){
-												
-						orderItemList_category_productIdNormal.push(orderItemList_category[i][j])	
-
-					}else{
-						
-						productId_orderItemList.push(orderItemList_category[i][j]);			
-					}
-					
-					if(j==orderItemList_category[i].length-1){
-						
-						if(orderItemList_category_productIdNormal.length>0){
-							
-							if (orderItemList_category_productIdNormal.length==1) {
-
-								productId_orderItemList.push(orderItemList_category_productIdNormal[0])
-								console.log(orderItemList_category_productIdNormal)
-
-							}
-							if (orderItemList_category_productIdNormal.length>1) {
-								
-								for (var k = 1; k < orderItemList_category_productIdNormal.length; k++) {
-									
-									orderItemList_category_productIdNormal[0].quantity+=orderItemList_category_productIdNormal[k].quantity;
-								
-								}
-								productId_orderItemList.push(orderItemList_category_productIdNormal[0])
-								
-							}	
-						}
-						orderItemList_categoryProductId.push(productId_orderItemList);	
-						
-						orderItemList_category_productIdNormal = []						
-					}											
-				}else{
-
-					if(orderItemList_category_productIdNormal.length>0){
-
-						if (orderItemList_category_productIdNormal.length==1) {
-
-							productId_orderItemList.push(orderItemList_category_productIdNormal[0])
-
-						}
-						if (orderItemList_category_productIdNormal.length>1) {
-							for (var k = 1; k < orderItemList_category_productIdNormal.length; k++) {
-								orderItemList_category_productIdNormal[0].quantity+=orderItemList_category_productIdNormal[k].quantity;
-							}
-							productId_orderItemList.push(orderItemList_category_productIdNormal[0])
-							
-						}	
-					}
-
-					orderItemList_categoryProductId.push(productId_orderItemList);
-
-					productId_orderItemList=[]	
-					orderItemList_category_productIdNormal=[]
-						
-					if(orderItemList_category[i][j].is_lottery!=1&&orderItemList_category[i][j].status_id!=6&&orderItemList_category[i][j].status_id!=7){
-												
-						orderItemList_category_productIdNormal.push(orderItemList_category[i][j])	
-						
-					}else{
-						productId_orderItemList.push(orderItemList_category[i][j]);
-					}
-					if(j==orderItemList_category[i].length-1){
-
-						if(orderItemList_category_productIdNormal.length>0){
-							if (orderItemList_category_productIdNormal.length==1) {productId_orderItemList.push(orderItemList_category_productIdNormal[0])}
-							if (orderItemList_category_productIdNormal.length>1) {
-								for (var k = 1; k < orderItemList_category_productIdNormal.length; k++) {
-
-									orderItemList_category_productIdNormal[0].quantity+=orderItemList_category_productIdNormal[k].quantity;
-								}
-								productId_orderItemList.push(orderItemList_category_productIdNormal[0])
-								
-							}	
-						}
-						orderItemList_categoryProductId.push(productId_orderItemList);
-						orderItemList_category_productIdNormal=[]
-					}				
-				}							
-			}
-			
-			orderItemList_category_productId.push(orderItemList_categoryProductId);
-			orderItemList_categoryProductId=[]
-		}
-		
-		console.log(orderItemList_category_productId)
-
-		var service_charge =  shop.service_charge 
-
-		$scope.tableInf.is_out==1?payable:payable+=service_charge;
-		$scope.tableInf.is_out==1?total:total+=service_charge;
-
-		total = total.toFixed(2);
-		payable = payable.toFixed(2);*/
 
 		var service_charge = shop.service_charge;
 		console.log("service_charge")
@@ -4077,8 +3861,8 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 										top+=4;
 										LODOP.ADD_PRINT_TEXT(top+"mm","1mm","100%","4mm","联系方式:"+shop.phone);
 										//dev																		
-									    LODOP.PREVIEW();
-									    //LODOP.PRINT();
+									    //LODOP.PREVIEW();
+									    LODOP.PRINT();
 									    window.location.reload()									    									   									   					
 																				
 									}else{

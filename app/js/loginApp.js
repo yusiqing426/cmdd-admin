@@ -1,9 +1,5 @@
 'use strict'
 var isRemote = false;
-/*var LODOP = getCLodop();
-var strResult=LODOP.GET_SYSTEM_INFO("NetworkAdapter.1.IPAddress");
-alert(strResult)*/
-//$.getJSON("http://47.94.101.5:8080/api")
 
 var apiHost ="http://localhost:8082/api"
 //var apiHost = "http://127.0.0.1:8082/api"

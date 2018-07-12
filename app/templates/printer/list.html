@@ -26,13 +26,13 @@
 	</div>
 	 <table class="table table-striped printer-table">
 		  <thead>
-          <tr>
-                <th class="text-center"><a ng-click="tableParams.sorting('id',(reverseSort = !reverseSort)?'asc':'desc')">序号</a></th>
-                <th class="text-center"><a ng-click="tableParams.sorting('printer_type',(reverseSort = !reverseSort)?'asc':'desc')">打印类型</a></th>
-                <th class="text-center"><a ng-click="tableParams.sorting('name',(reverseSort = !reverseSort)?'asc':'desc')">打印机名称</a></th> 
-                <th class="text-center"><a ng-click="tableParams.sorting('page_width',(reverseSort = !reverseSort)?'asc':'desc')">纸张宽度</a></th> 
-                <th class="text-center" ng-if="isUnify==0"><a>操作</a></th>             
-          </tr>
+			  <tr>
+					<th class="text-center"><a ng-click="tableParams.sorting('id',(reverseSort = !reverseSort)?'asc':'desc')">序号</a></th>
+					<th class="text-center"><a ng-click="tableParams.sorting('printer_type',(reverseSort = !reverseSort)?'asc':'desc')">打印类型</a></th>
+					<th class="text-center"><a ng-click="tableParams.sorting('name',(reverseSort = !reverseSort)?'asc':'desc')">打印机名称</a></th>
+					<th class="text-center"><a ng-click="tableParams.sorting('page_width',(reverseSort = !reverseSort)?'asc':'desc')">纸张宽度</a></th>
+					<th class="text-center" ng-if="isUnify==0"><a>操作</a></th>
+			  </tr>
           </thead>
           <tbody ng-if="isUnify==0">
             <tr ng-repeat="(index,printer) in printerList">

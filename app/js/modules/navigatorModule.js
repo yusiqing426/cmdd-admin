@@ -240,7 +240,7 @@ function ($scope, $window, $http, $location, $interval, Login,tableOperateServic
 		          		var printJobLists=response.msg 
 		          	 
 			          	if(printJobLists.length>0){ 
-			          		//console.log(printJobLists) 
+			          		console.log(printJobLists)
 			          		shopInformationService.view(
 						        {id:localStorage.getItem("shop_id")},
 				          		function(response){	
@@ -282,12 +282,13 @@ function ($scope, $window, $http, $location, $interval, Login,tableOperateServic
 																}
 																
 							                    				var fontSize = pageWidth/58*9;							                    														              
-												               	
+												               	console.log("1")
 												               	var isPrintInit;
 							                      				while(!(isPrintInit = LODOP.PRINT_INIT("")) && (count < 10)){							                      					
 								                      				count++;
 								                      				continue;
 								                      			}
+                                                                console.log("2")
 												               	if(isPrintInit){
 
 												               		LODOP.SET_PRINT_PAGESIZE(3,pageWidth+'mm',0,0);
@@ -319,11 +320,13 @@ function ($scope, $window, $http, $location, $interval, Login,tableOperateServic
 
 											                            
 													                                        															                    													                      														       
-																        //LODOP.PREVIEW(); 
+																        //LODOP.PREVIEW();
+                                                                        console.log("isPrint ---- ");
 																        var isPrint = LODOP.PRINT();
+
 																        if(isPrint!=""){
 												                        	if(printJobLists[i].status_id!=6){
-                                                                                console.log("printJobLists[i]------");
+                                                                                console.log("printJobLists[i] ----");
 																				console.log(printJobLists[i]);
 														                        orderItem_update= {
 														                            id:printJobLists[i].orderItem_id,
@@ -334,32 +337,46 @@ function ($scope, $window, $http, $location, $interval, Login,tableOperateServic
 															                    tableOperateService.orderProductUpdate(
                                                                                     orderItem_update,
 														                        	function (response) {
-													                        			console.log("删除打印任务orderitem_id: ----"+orderItem_update.id)
 															                          	if (response.code != 200) {
 															                            	alert('打印成功后修改订单项状态失败');
 															                            	return;
-															                          	}                        
-														                        	},
+															                          	}
+                                                                                        /*tableOperateService.deletePrintJob(
+                                                                                            {id:printJobLists[i].id},
+                                                                                            function(response){
+                                                                                                if(response.code==200){
+                                                                                                    console.log("删除打印任务成功");
+                                                                                                }else{
+                                                                                                    alert("删除打印任务失败");
+                                                                                                    return;
+                                                                                                }
+                                                                                            },
+                                                                                            function(error){
+                                                                                                console.log(error);
+                                                                                            }
+                                                                                        );*/
+                                                                                    },
 															                        function (error) {
 															                          console.log(error);
 															                        }
 													                      		);
+                                                                                tableOperateService.deletePrintJob(
+                                                                                    {id:printJobLists[i].id},
+                                                                                    function(response){
+                                                                                        if(response.code==200){
+                                                                                            console.log("删除打印任务成功");
+                                                                                        }else{
+                                                                                            alert("删除打印任务失败");
+                                                                                            return;
+                                                                                        }
+                                                                                    },
+                                                                                    function(error){
+                                                                                        console.log(error);
+                                                                                    }
+                                                                                );
 														                 	}; 
 														                 	
-														                 	tableOperateService.deletePrintJob(
-													                      			{id:printJobLists[i].id},
-													                      			function(response){
-													                      				if(response.code==200){
-													                      					console.log("删除打印任务成功");
-													                      				}else{
-													                      					alert("删除打印任务失败");
-													                      					return;
-													                      				}
-													                      			},
-													                      			function(error){
-													                      				console.log(error);
-													                      			}
-													                      	);																							
+
 										                        		}else{
 										                        			alert("isPrintFail");
 										                        		}
@@ -458,27 +475,42 @@ function ($scope, $window, $http, $location, $interval, Login,tableOperateServic
 													                          	if (response.code != 200) {
 													                            	alert("打印成功后修改订单项状态失败");
 													                            	return;
-													                          	}                        
-												                        	},
+													                          	}
+                                                                               /* tableOperateService.deletePrintJob(
+                                                                                    {id:printJobLists[i].id},
+                                                                                    function(response){
+                                                                                        if(response.code==200){
+                                                                                            console.log("删除打印任务成功");
+                                                                                        }else{
+                                                                                            alert("删除打印任务失败");
+                                                                                            return;
+                                                                                        };
+                                                                                    },
+                                                                                    function(error){
+                                                                                        console.log(error);
+                                                                                    }
+                                                                                );*/
+                                                                            },
 													                        function (error) {
 													                          console.log(error);
 													                        }
 											                      		);
+                                                                        tableOperateService.deletePrintJob(
+                                                                            {id:printJobLists[i].id},
+                                                                            function(response){
+                                                                                if(response.code==200){
+                                                                                    console.log("删除打印任务成功");
+                                                                                }else{
+                                                                                    alert("删除打印任务失败");
+                                                                                    return;
+                                                                                };
+                                                                            },
+                                                                            function(error){
+                                                                                console.log(error);
+                                                                            }
+                                                                        );
 												                 	}; 
-												                 	tableOperateService.deletePrintJob(
-											                      			{id:printJobLists[i].id},
-											                      			function(response){
-											                      				if(response.code==200){
-											                      					console.log("删除打印任务成功");
-											                      				}else{
-											                      					alert("删除打印任务失败");
-											                      					return;
-											                      				};
-											                      			},
-											                      			function(error){
-											                      				console.log(error);
-											                      			}
-											                      	);												                      																							
+
 										                        }else{
 										                        	alert("EXCEPTION:isPrintFail");
 										                        }										                        

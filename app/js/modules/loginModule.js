@@ -12,7 +12,6 @@ loginModule.controller('loginController',
   	$scope.login = function(user) {
   		console.log(user);
         var acoount0 = user.account.charAt(0);
-        //alert("1")
   		if(acoount0=='f'){
             login_local();
 		}else {
@@ -22,7 +21,7 @@ loginModule.controller('loginController',
 			LoginService.login(user,
 				function(response) {
 
-					console.log(response);
+					//console.log(response);
 
 					var token = response.msg.token;
 					var id = response.msg.user_id;
@@ -35,7 +34,28 @@ loginModule.controller('loginController',
 					localStorage.setItem('is_remind', 1)
 					var strs= new Array(); //定义一数组
 					strs=user_keys.split(","); //字符分割
-					localStorage.setItem('now_keys', strs[0])
+					localStorage.setItem('now_keys', strs[0]);
+                    if(strs[0]!=1&&strs[0]!=2){
+                        if(strs[0]==3&&JSON.stringify(user_keys).indexOf(7)==-1){
+                            localStorage.setItem('shop_id', id)
+                            localStorage.setItem('name', '管理员')
+                            LoginService.getShopInfo({id:id},function(response){
+                                var service_charge = 0;
+                                if(response.msg.service_charge!=null) service_charge = response.msg.service_charge;
+                                localStorage.setItem('service_charge', service_charge);
+                            })
+                        }else{
+                            LoginService.getShopId({id:id},function(response){
+                                localStorage.setItem('shop_id', response.msg.shop_id);
+                                localStorage.setItem('name', response.msg.name);
+                                LoginService.getShopInfo({id:response.msg.shop_id},function(response){
+                                    var service_charge = 0;
+                                    if(response.msg.service_charge!=null)service_charge = response.msg.service_charge;
+                                    localStorage.setItem('service_charge', service_charge)
+                                })
+                            })
+                        }
+                    }
 					if(angular.isDefined(response.code) && response.code == 200) {
 
 						//版本更新
@@ -62,42 +82,41 @@ loginModule.controller('loginController',
 
 
 							//云端数据下载
-								//查询修改 桌位/菜品/菜品类别
+							//查询修改 桌位/菜品/菜品类别
 							function sync(){
-								Dining_tableService.syncList_remote(
-									{id:30},
+							Dining_tableService.syncList_remote(
+								{id:30},
+								function(response1){
+									if(response1.code==200&&response1.msg.length>0){
 
-									function(response1){
-										if(response1.code==200&&response1.msg.length>0){
+										//console.log("response1")
+										//console.log(response1)
 
-											//console.log("response1")
-											//console.log(response1)
+										var Things = response1.msg;
 
-											var Things = response1.msg;
-
-											for (var i = 0; i < Things.length; i++) {
-												Things[i].sync_status = 1;
-												Dining_tableService.saveById(Things[i],function (response2) {
-													//console.log("response2")
-													//console.log(response2)
-												})
-												var thing = {
-													id:Things[i].id,
-													sync_status:1
+										for (var i = 0; i < Things.length; i++) {
+											Things[i].sync_status = 1;
+											Dining_tableService.saveById(Things[i],function (response2) {
+												//console.log("response2")
+												//console.log(response2)
+											})
+											var thing = {
+												id:Things[i].id,
+												sync_status:1
+											}
+											Dining_tableService.remoteUpdate(
+												thing,
+												function(response3){
+													//console.log("response3")
+													//console.log(response3)
 												}
-												Dining_tableService.remoteUpdate(
-													thing,
-													function(response3){
-														//console.log("response3")
-														//console.log(response3)
-													}
-												)
-											};
-										}else{
-											console.log("Dining_tableService ---- 请求异常或集合数据为空")
-										}
+											)
+										};
+									}else{
+										console.log("Dining_tableService ---- 请求异常或集合数据为空")
 									}
-								)
+								}
+							)
 
 							CategoryService.syncList(
 								{id:30},
@@ -115,10 +134,11 @@ loginModule.controller('loginController',
 
 											things[i].sync_status = 1;
 
-											CategoryService.saveById(things[i],function (response2) {
-												//console.log("category --- response2")
-												//console.log(response2)
-											})
+											CategoryService.saveById(
+											    things[i],
+                                                function (response2) {
+												}
+											)
 
 											var thing = {
 												id:things[i].id,
@@ -146,32 +166,29 @@ loginModule.controller('loginController',
 							ProductService.syncList(
 								{id:30},
 								function(response1){
-									//TODO 后端定义 arr.size的状态
-									console.log("response1");
+									console.log("Product --- response1");
 									console.log(response1);
 									if(response1.code==200&&response1.msg.length>0){
-
-										//console.log("product ---- response1")
-										//console.log(response1)
 
 										var Things = response1.msg;
 										for (var i = 0; i < Things.length; i++) {
 											Things[i].sync_status = 1;
-											ProductService.saveById(Things[i],function (response2) {
-												//console.log("product ---- response2")
-												//console.log(response2)
-											})
-											//\:remote --- 30
-											var thing = {
+											ProductService.saveById(
+												Things[i],
+												function (response2) {
+													console.log("product ---- response2")
+													console.log(response2)
+												}
+											)
+											var sync = {
 												id:Things[i].id,
 												sync_status:1
 											}
 											ProductService.remoteUpdate(
-												thing,
+												sync,
 												function(response3){
-													//console.log("product ---- response3")
-													//console.log(response3)
-													//lengthTh++;
+													console.log("product ---- response3")
+													console.log(response3)
 												}
 											)
 										}
@@ -183,7 +200,6 @@ loginModule.controller('loginController',
 									}
 								}
 							)
-                                console.log("--------------1-------------")
                             syncService.imageSyncList_remote(
                                 function(response1){
                                     if(response1.code==200&&response1.msg.length>0){
@@ -204,32 +220,24 @@ loginModule.controller('loginController',
                                                     console.log(response2)
                                                 }
                                             )
-
-                                            var sync = {
-                                                id:syncs[i].id,
-                                                sync_status:1
-                                            }
-                                            syncService.imageInsertById_remote(
-                                                sync,
+                                            syncService.imageUpdateSync_status_remote(
+												{id:syncs[i].id},
                                                 function(response3){
                                                     console.log("image --- response3")
                                                     console.log(response3)
 
                                                 }
                                             )
-
-
                                         }
                                         //TODO:异步数据延迟
                                         //logininit();
 
                                     }else{
-                                        console.log("syncService --- 请求异常或集合数据为空")
+                                        console.log("syncService.imageSyncList_remote --- 请求异常或集合数据为空")
                                     }
                                 }
                             )
-                                console.log("--------------1-------------")
-							 alert('正在加载云端数据,请等待....');
+							alert('正在加载云端数据,请等待....');
 							}
 							if(!isRemote)sync();
 							shopInformationService.syncList_remote(function (response1) {
@@ -240,8 +248,8 @@ loginModule.controller('loginController',
 										shopInformationService.saveById(
 											syncList[i],
 											function (response2) {
-												console.log("shop --- response2");
-												console.log(response2)
+												//console.log("shop --- response2");
+												//console.log(response2)
 											}
 										)
 										//sync:updateSyncStatus_remote
@@ -252,8 +260,8 @@ loginModule.controller('loginController',
 										shopInformationService.update_remote(
 											synci,
 											function (response3) {
-												console.log("shop --- response3");
-												console.log(response3)
+												//console.log("shop --- response3");
+												//console.log(response3)
 											}
 										)
 									}
@@ -263,40 +271,10 @@ loginModule.controller('loginController',
 								}
 							})
 							function loginInit(){
-
-								if(strs[0]!=1&&strs[0]!=2){
-									if(strs[0]==3&&JSON.stringify(user_keys).indexOf(7)==-1){
-										localStorage.setItem('shop_id', id)
-										localStorage.setItem('name', '管理员')
-										LoginService.getShopInfo({id:id},function(response){
-											var service_charge = 0;
-											if(response.msg.service_charge!=null) service_charge = response.msg.service_charge;
-											localStorage.setItem('service_charge', service_charge)
-											$window.location.href = 'home.html';
-										})
-									}else{
-										LoginService.getShopId({id:id},function(response){
-											localStorage.setItem('shop_id', response.msg.shop_id)
-											localStorage.setItem('name', response.msg.name)
-											LoginService.getShopInfo({id:response.msg.shop_id},function(response){
-												var service_charge = 0;
-												if(response.msg.service_charge!=null)service_charge = response.msg.service_charge;
-												    localStorage.setItem('service_charge', service_charge)
-												   $window.location.href = 'home.html';
-											})
-										})
-									}
-								}else{
-									$window.location.href = 'home.html';
-								}
+							    //dev
+                                $window.location.href = 'home.html';
 							}
-						if(isRemote){
-								loginInit();
-						}else{
 							setTimeout(loginInit,2000);
-						}
-
-
 					}else{
 					  $scope.error = response.msg
 					}
@@ -349,7 +327,7 @@ loginModule.controller('loginController',
                                         service_charge = response5.msg.service_charge;
                                         localStorage.setItem('service_charge', service_charge)
                                     }
-                                    $window.location.href = 'home.html';
+                                   // $window.location.href = 'home.html';
                                 })
                             })
                         }
