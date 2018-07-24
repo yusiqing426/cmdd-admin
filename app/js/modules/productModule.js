@@ -2,20 +2,21 @@
 
 var productModule = angular.module('productModule', ['ngTable', 'checklist-model'])
 
-productModule.controller('productListController', [ '$http','$scope', 'ProductService', 'ngTableParams', '$filter','DataUtilService','CategoryService','ImageService',
-	function ($http,$scope, ProductService, ngTableParams, $filter,DataUtilService,CategoryService,ImageService) {						
-		
+productModule.controller('productListController', [ '$http','$scope', 'ProductService', 'ngTableParams', '$filter','DataUtilService','CategoryService','ImageService','syncService',
+	function ($http,$scope, ProductService, ngTableParams, $filter,DataUtilService,CategoryService,ImageService,syncService
+	) {
+
 	$scope.Is_EnableModel=DataUtilService.Is_EnableModel;
-					
+
 		CategoryService.list({},
 			function(response){
 				if(!response.code==200){
 				alert('获取类别失败');
 				return;
 			}
-			$scope.CategoryModel=response.msg;			
+			$scope.CategoryModel=response.msg;
 		})
-						
+
 		$scope.listFilter = {};
 		/*处理解析图片*/
 
@@ -23,7 +24,7 @@ productModule.controller('productListController', [ '$http','$scope', 'ProductSe
 		ProductService.list().$promise.then(function (response) {
 			/*是否需要封装装对象*/
     		$scope.dataUrlForepart=apiHost + '/image/';
-  			
+
 			$scope.tableParams = new ngTableParams(
 					{
 						page: 1,
@@ -46,6 +47,64 @@ productModule.controller('productListController', [ '$http','$scope', 'ProductSe
 	}
 	$scope.getProductList();
 
+
+	$scope.sync = function(){
+        var isConfirm = confirm("是否同步菜品类别数据");
+        if(!isConfirm)return
+        /*syncService.imageSyncList_remote(
+            function(response1){
+                if(response1.code==200&&response1.msg.length>0){
+
+                    console.log("image --- response1")
+                    console.log(response1)
+
+                    var syncs = response1.msg;
+
+                    for (var i = 0; i < syncs.length; i++) {
+                        console.log(syncs[i])
+                        syncService.imageInsertById_local(
+                            syncs[i],
+                            function (response2) {
+                                console.log("image --- response2")
+                                console.log(response2)
+                            }
+                        )
+                    }
+                    //TODO:异步数据延迟
+                    //logininit();
+
+                }else{
+                    console.log("syncService.imageSyncList_remote --- 请求异常或集合数据为空")
+                }
+            }
+        )*/
+        ProductService.syncList(
+            {id:30},
+            function(response1){
+
+                $scope.productList = response1.msg;
+                if(response1.code==200&&response1.msg.length>0){
+
+                    var Things = response1.msg;
+                    for (var i = 0; i < Things.length; i++) {
+                        ProductService.saveById(
+                            Things[i],
+                            function (response2) {
+                                console.log("product ---- response2")
+                                console.log(response2)
+                            }
+                        )
+                    }
+                    //TODO:异步数据延迟
+
+
+                }else{
+                    console.log("ProductService --- 请求异常或集合数据为空")
+                }
+            }
+        )
+	}
+
 	$scope.deleteItem=function(itemId,index){
 		console.log(ProductService);
 		ProductService.delete({id:itemId},
@@ -54,12 +113,12 @@ productModule.controller('productListController', [ '$http','$scope', 'ProductSe
 					alert("删除失败");
 					return;
 				}
-				$scope.productList.slice(index,1);						
+				$scope.productList.slice(index,1);
 			},
 			function(err){
 				alert("--productListController--deleteItem-->err");
 			}
-		)	
+		)
 	}
 
 	$scope.change = function(item){
@@ -78,7 +137,7 @@ productModule.controller('productListController', [ '$http','$scope', 'ProductSe
 						'id':productId,
 						'sort':sort,
 						'shop_id':localStorage.getItem('id')
-						}	
+						}
 		ProductService.update(product,
 			function(response){
 		        if(response.code!=200){
@@ -89,9 +148,9 @@ productModule.controller('productListController', [ '$http','$scope', 'ProductSe
 					alert("修改成功")
 		        }
 		   	}
-		) 
+		)
 	}
-			
+
 }])
 
 productModule.controller('productCreateController', [ '$http','$scope', '$location', 'ProductService','DataUtilService','CategoryService','ImageService',
@@ -254,9 +313,6 @@ productModule.controller('productController',['$scope','$location','ProductServi
 	$scope.update=function(){
 		if($scope.imageFile == null || imageChanged==false){			
 			updateProduct();
-			//if($scope.product.is_upload!=syncStatus+1){
-			 //	$scope.product.is_upload = syncStatus+2;
-			//}
 		}else{		
 			ImageService.uploadImageToServer('/image?id='+$scope.product.logo_id,$scope.imageFile).then(
 					function(ress){

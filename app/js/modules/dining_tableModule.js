@@ -2,7 +2,9 @@
 
 var dining_tableModule = angular.module('dining_tableModule', ['ngTable', 'checklist-model'])
 
-		dining_tableModule.controller('dining_tableListController',['$scope', 'Dining_tableService', 'ngTableParams', '$filter',function ($scope, Dining_tableService, ngTableParams, $filter) {
+		dining_tableModule.controller('dining_tableListController',
+			['$scope', 'Dining_tableService', 'ngTableParams', '$filter',
+				function ($scope, Dining_tableService, ngTableParams, $filter) {
 		
 			$scope.listFilter = {};
 		
@@ -26,6 +28,48 @@ var dining_tableModule = angular.module('dining_tableModule', ['ngTable', 'check
 							}
 				 )
 			})
+
+            $scope.sync = function(){
+				var isConfirm = confirm("是否同步云端桌位数据");
+				if(!isConfirm)return
+				Dining_tableService.syncList_remote(
+                    {id:30},
+                    function(response1){
+                        if(response1.code==200&&response1.msg.length>0){
+
+                            //console.log("response1")
+                            //console.log(response1)
+
+                            var Things = response1.msg ;
+                            $scope.dining_tableList =  Things;
+
+                            for (var i = 0; i < Things.length; i++) {
+                                Things[i].sync_status = 1;
+                                Dining_tableService.saveById(
+                                    Things[i],
+                                    function (response2) {
+                                        //console.log("response2")
+                                        //console.log(response2)
+                                    }
+                                )
+                                var thing = {
+                                    id:Things[i].id,
+                                    sync_status:1
+                                }
+                                Dining_tableService.remoteUpdate(
+                                    thing,
+                                    function(response3){
+                                        //console.log("response3")
+                                        //console.log(response3)
+                                    }
+                                )
+                            };
+                        }else{
+                            console.log("Dining_tableService ---- 请求异常或集合数据为空")
+                        }
+                    }
+                )
+            }
 		} 
 	])
 

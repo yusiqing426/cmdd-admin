@@ -561,6 +561,7 @@ function ($scope, $window, $http, $location, $interval, Login,tableOperateServic
 
         var audio = document.getElementById( "audioPlay" );
         //浏览器支持 audion
+		audio.volume(1)
 
 		/*
 		$('html').one('touchstart',function(){

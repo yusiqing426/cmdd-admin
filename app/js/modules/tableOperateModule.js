@@ -1933,8 +1933,7 @@ tableOperateModule.controller('takingOrderListController', [ '$scope','$location
 						unit: $scope.productList[i].p.unit,
 						description: $scope.productList[i].description,
 						orderItem_id: $scope.productList[i].id,
-						table_runner: localStorage.getItem('name')//,
-                        //sync_status:11
+						table_runner: localStorage.getItem('name')
 					}
 
 					tableOperateService.orderProductUpdate($scope.productList[i],
@@ -1950,7 +1949,7 @@ tableOperateModule.controller('takingOrderListController', [ '$scope','$location
 						},
 						function (error) {}
 					);
-                    //$scope.data.sync_status = syncStatus + 1;
+
 					tableOperateService.printerProductCreate(data,
 						function (response) {
 							if (response.code == 500) {
@@ -2293,9 +2292,9 @@ tableOperateModule.controller('orderDetailController', [ '$scope','$location','$
 							alert('添加失败')
 							return
 						}
-						/*count++;
+						count++;
 						if(count==sum)
-							window.location.href="#orderDetail/"+$routeParams.tableId;*/
+							window.location.href="#orderDetail/"+$routeParams.tableId;
 					},
 					function (error) {}
 				);			
@@ -2619,24 +2618,25 @@ tableOperateModule.controller('changeTableController', [ '$scope','$location','$
 
 }])
 
-tableOperateModule.controller('mergeTableController', [ '$scope','$location','$routeParams','tableOperateService',
-  function ($scope,$location,$routeParams, tableOperateService) {
-	$scope.mainTableId = $routeParams.tableId;
-	$scope.diningTableList = [];
-	$scope.selectTableList = [];
+tableOperateModule.controller('mergeTableController',
+    [ '$scope','$location','$routeParams','tableOperateService',
+    function ($scope,$location,$routeParams, tableOperateService) {
+        $scope.mainTableId = $routeParams.tableId;
+        $scope.diningTableList = [];
+        $scope.selectTableList = [];
 	
 
-	tableOperateService.tableView({id:$routeParams.tableId},
-      function (response) {
-        if (response.code == 500) {
-          alert('获取桌位信息失败')
-          return
-        }
-        $scope.tableInf  = response.msg
-        $scope.selectTableList.push($scope.tableInf);
-      },
-     function (error) {}
-    );
+        tableOperateService.tableView({id:$routeParams.tableId},
+            function (response) {
+                if (response.code == 500) {
+                    alert('获取桌位信息失败')
+                return
+            }
+            $scope.tableInf  = response.msg
+            $scope.selectTableList.push($scope.tableInf);
+            },
+            function (error) {}
+        );
 
     tableOperateService.tableList({},
       function (response) {
@@ -2706,39 +2706,44 @@ tableOperateModule.controller('mergeTableController', [ '$scope','$location','$r
 
 }])
 
-tableOperateModule.controller('payOrderController', [ '$scope','$location','$routeParams','$interval','tableOperateService','md5','DataUtilService','PrinterService','shopInformationService',
-  function ($scope,$location,$routeParams,$interval, tableOperateService,md5,DataUtilService,PrinterService,shopInformationService) {
-	$scope.totalPrice = 0;
-	$scope.tableInf = {};
-	$scope.mergeTableList = [];
-	$scope.orderList = [];
+tableOperateModule.controller('payOrderController',
+    ['$scope','$location','$routeParams','$interval','tableOperateService','md5','DataUtilService','PrinterService','shopInformationService','lotteryLogService',
+    function ($scope,$location,$routeParams,$interval, tableOperateService,md5,DataUtilService,PrinterService,shopInformationService,lotteryLogService) {
 
-	$scope.isUseMember = 0;
-	$scope.memberPhone = "";
-	$scope.member = {};
 
-	$scope.changeUseMember = function(){
-		if($('#selectMemberPay').prop('checked') ==true){
-			$scope.isUseMember = 1;
-			$scope.discount = "";
-			$('#memberPhone').removeAttr("disabled");
-			$('#balancePay').removeAttr("disabled");
-			$('#integralPay').removeAttr("disabled");
-			$('#discount').attr("disabled","disabled");
-			//$scope.changePrice();
-		}else{
-			$scope.isUseMember = 0;
-			$scope.memberPhone = "";
-			$scope.member = {};
-			$scope.balancePay = 0;
-			$scope.integralPay = 0;
-			$('#memberPhone').attr("disabled","disabled");
-			$('#balancePay').attr("disabled","disabled");
-			$('#integralPay').attr("disabled","disabled");
-			$('#discount').removeAttr("disabled");
-			$scope.changePrice();
-		}
-	}
+
+
+        $scope.totalPrice = 0;
+        $scope.tableInf = {};
+        $scope.mergeTableList = [];
+        $scope.orderList = [];
+
+        $scope.isUseMember = 0;
+        $scope.memberPhone = "";
+        $scope.member = {};
+
+        $scope.changeUseMember = function(){
+            if($('#selectMemberPay').prop('checked') ==true){
+                $scope.isUseMember = 1;
+                $scope.discount = "";
+                $('#memberPhone').removeAttr("disabled");
+                $('#balancePay').removeAttr("disabled");
+                $('#integralPay').removeAttr("disabled");
+                $('#discount').attr("disabled","disabled");
+                //$scope.changePrice();
+            }else{
+                $scope.isUseMember = 0;
+                $scope.memberPhone = "";
+                $scope.member = {};
+                $scope.balancePay = 0;
+                $scope.integralPay = 0;
+                $('#memberPhone').attr("disabled","disabled");
+                $('#balancePay').attr("disabled","disabled");
+                $('#integralPay').attr("disabled","disabled");
+                $('#discount').removeAttr("disabled");
+                $scope.changePrice();
+            }
+        }
 	$scope.searchMember = function(){
 		if($scope.memberPhone!=""){
 			for(var i=0;i<$scope.memberList.length;i++){
@@ -2855,6 +2860,8 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 		function (error) {}
 	);
 
+
+
 	var printer_999 = {};
 	PrinterService.getPrinterByPrinter_type(
 		{printer_type:999},
@@ -2869,6 +2876,8 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 	var getOrderDetail = function(){
 		tableOperateService.orderDetail({id:$routeParams.tableId},
 			function (response) {
+                console.log(" tableOperateService.orderDetail ------ response");
+                console.log(response);
 				if (response.code == 500) {
 					alert('获取订单详情失败')
 					return
@@ -2885,10 +2894,24 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 					$scope.setOrderList();
 					$scope.defautResidue();
 				}
+				var orderId = response.msg.id;
+				lotteryLogService.queryByOrderId(
+                    {id:orderId},
+                    function (response2) {
+                        console.log(" lotteryLogService.queryByOrderId ------ ");
+                        console.log(response2);
+                        if(response2.code==200&&response2.msg!=null&&response2.msg.is_cash==1){
+                            $scope.orderCashed = 1;
+                            //alert($scope.orderCashed)
+                        }
+                    }
+                )
 			},
 			function (error) {}
 		)
 	}
+
+
 
 	$scope.setOrderList = function(){
 		var totalPrice = 0;
@@ -2954,7 +2977,8 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 				$scope.orderList[i].loi[j].total_price = price;
 			
 			}
-			if($scope.tableInf.is_out==0){
+			var service_charge = localStorage.getItem("service_charge");
+			if($scope.tableInf.is_out==0&&service_charge!=null&&$scope.orderCashed){
 				totalPrice += $scope.service_charge;
 				payable += $scope.service_charge;
 			}
@@ -3319,9 +3343,9 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 					}
 				
 					
-					if($scope.tableInf.is_out==0&&shop.service_charge!=null&&shop.service_charge!=0){	
+					if($scope.tableInf.is_out==0&&shop.service_charge!=null&&shop.service_charge!=0&&$scope.orderCashed==1){
 						top+=6;							
-						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","服务费");											
+						LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","一元乐购");
 						LODOP.ADD_PRINT_TEXT(top+"mm","55%","100%","4mm",shop.service_charge);
 						LODOP.ADD_PRINT_TEXT(top+"mm","67%","100%","4mm","1");
 						LODOP.ADD_PRINT_TEXT(top+"mm","79%","100%","4mm",shop.service_charge);
@@ -3398,7 +3422,10 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 					LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
 				}	
 
-				var isFreeSingleOrIsBill= orderList[0].pay_type==120?"免单支付":$scope.payType = 130?"挂账支付":false;
+				var isFreeSingleOrIsBill= $scope.payType==120?"免单支付":$scope.payType == 130?"挂账支付":false;
+				console.log("orderList[0] ------ ");
+				console.log(orderList[0]);
+
 				if(isFreeSingleOrIsBill){
 					top+=4;
 					LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
@@ -3439,9 +3466,9 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 				top+=4;
 				LODOP.ADD_PRINT_TEXT(top+"mm","1mm","100%","6mm","服务热线：400－0217－123");
 		        //dev
-				LODOP.PREVIEW();
+				//LODOP.PREVIEW();
 
-				//LODOP.PRINT();
+				LODOP.PRINT();
 				       	
             }else{
             	alert("打印机名称对应打印设备不存在");
@@ -3505,7 +3532,7 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
             }
 		);
 	    }
-	//dev
+
 	console.log("打印预打单");	
 
 	$scope.printPay = function(){
@@ -3773,11 +3800,15 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 											
 											console.log(orderItemList_category_productId)
 
-											var service_charge =  shop.service_charge 
+											var service_charge =  shop.service_charge;
+											//TODO
+                                            if(service_charge==null){
+                                                service_charge=0;
+                                            }
 
-											$scope.tableInf.is_out==1?payable:payable+=service_charge;
-											$scope.tableInf.is_out==1?total:total+=service_charge;
-											$scope.tableInf.is_out==1?totalMemberMoney:totalMemberMoney+=service_charge;
+											$scope.tableInf.is_out&&$scope.orderCashed==1?payable:payable+=service_charge;
+											$scope.tableInf.is_out&&$scope.orderCashed==1?total:total+=service_charge;
+											$scope.tableInf.is_out&&$scope.orderCashed==1?totalMemberMoney:totalMemberMoney+=service_charge;
 
 
 											
@@ -3823,10 +3854,10 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 
 											}
 										}
-										if($scope.tableInf.is_out==0&&shop.service_charge!=null&&shop.service_charge!=0){
+										if($scope.tableInf.is_out==0&&shop.service_charge!=null&&shop.service_charge!=0&&$scope.orderCashed==1){
 											totalMemberPrice+=service_charge
 											top+=6;		
-											LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","服务费");											
+											LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","一元换购");
 											LODOP.ADD_PRINT_TEXT(top+"mm","55%","100%","4mm",service_charge);
 											LODOP.ADD_PRINT_TEXT(top+"mm","67%","100%","4mm","1");
 											LODOP.ADD_PRINT_TEXT(top+"mm","79%","100%","4mm",service_charge);
@@ -3841,8 +3872,24 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 											LODOP.ADD_PRINT_TEXT(top+"mm","67%","100%","4mm","1");
 											LODOP.ADD_PRINT_TEXT(top+"mm","79%","100%","4mm",service_charge);
 										}*/
-									
-										top+=6;									
+
+                                        if(shop.shop_code_id!=null){
+                                            top+=6;
+                                            LODOP.ADD_PRINT_TEXT(top+"mm","1mm","100%","6mm","商铺二维码: ");
+                                            top+=6;
+                                            var imgUrl = apiHost+'/image/'+ shop.shop_code_id;
+                                            //alert(imgUrl)
+                                            //LODOP.ADD_PRINT_BARCODE(top+"mm","15%","22%","22%","QRCode","<div><img src="+imgUrl+"/></div>");
+                                            //http://test-admin.lbcy.com.cn/www/#/table/
+                                            //LODOP.ADD_PRINT_BARCODE(top+"mm","15%","22%","22%","QRCode","http://test-admin.lbcy.com.cn/www/#/table/10036");
+                                            LODOP. ADD_PRINT_IMAGE (top+"mm","5%","100%","100%","<img src="+imgUrl+"/>");
+                                            //LODOP. ADD_PRINT_HTML (top+"mm","5%","100%","100%","<div><img src="+imgUrl+"/></div>");
+                                            //LODOP.SET_PRINT_STYLEA(0,"HtmWaitMilSecs",1000);
+                                            top+=25;
+                                        }
+                                        top+=4;
+
+                                        top+=6;
 										LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","2mm","- - - - - - - - - - - - - - - - - - - - - - - - - -");
 										
 										
@@ -3860,10 +3907,11 @@ tableOperateModule.controller('payOrderController', [ '$scope','$location','$rou
 
 										top+=4;
 										LODOP.ADD_PRINT_TEXT(top+"mm","1mm","100%","4mm","联系方式:"+shop.phone);
-										//dev																		
+										//dev-pre
 									    //LODOP.PREVIEW();
 									    LODOP.PRINT();
-									    window.location.reload()									    									   									   					
+                                        //TODO:
+									    window.location.reload()
 																				
 									}else{
 										alert("对应名称打印设备不存在");
@@ -3999,8 +4047,10 @@ tableOperateModule.controller('kitchenOperateController', [ '$scope','$location'
 
 }])
 
-tableOperateModule.controller('printerOrderController', [ '$scope','$location','$routeParams','$interval','tableOperateService','DataUtilService','PrinterService','shopInformationService',
-  	function ($scope,$location,$routeParams,$interval, tableOperateService,DataUtilService,PrinterService,shopInformationService) {
+tableOperateModule.controller('printerOrderController',
+    [ '$scope','$location','$routeParams','$interval','tableOperateService','DataUtilService','PrinterService','shopInformationService','lotteryLogService',
+  	function ($scope,$location,$routeParams,$interval, tableOperateService,DataUtilService,PrinterService,shopInformationService,lotteryLogService
+    ) {
 	  	$scope.totalPrice = 0;
 	  	$scope.tableInf = {};
 		$scope.discount = '';
@@ -4073,6 +4123,18 @@ tableOperateModule.controller('printerOrderController', [ '$scope','$location','
 					alert('获取订单详情失败')
 					return
 				}
+				var orderId = response.msg.id
+                lotteryLogService.queryByOrderId(
+                    {id:orderId},
+                    function (response2) {
+                        console.log(" lotteryLogService.queryByOrderId ------ ");
+                        console.log(response2);
+                        if(response2.code==200&&response2.msg!=null&&response2.msg.is_cash==1){
+                            $scope.orderCashed = 1;
+                            //alert($scope.orderCashed)
+                        }
+                    }
+                )
 				var orderDetail  = response.msg;
 				var productList = [];
 				for(var i=0;i<orderDetail.loi.length;i++){
@@ -4305,12 +4367,15 @@ tableOperateModule.controller('printerOrderController', [ '$scope','$location','
 		
 		console.log(orderItemList_category_productId)
 
-		var service_charge =  shop.service_charge 
+		var service_charge =  shop.service_charge;
+		if(service_charge==null){
+		    service_charge = 0;
+        }
 
-		$scope.tableInf.is_out==1?payable:payable+=service_charge;
-		$scope.tableInf.is_out==1?total:total+=service_charge;
+		$scope.tableInf.is_out&&$scope.orderCashed==1?payable:payable+=service_charge;
+		$scope.tableInf.is_out&&$scope.orderCashed==1?total:total+=service_charge;
 		
-		$scope.tableInf.is_out==1?totalMemberPrice:totalMemberPrice+=service_charge;
+		$scope.tableInf.is_out&&$scope.orderCashed==1?totalMemberPrice:totalMemberPrice+=service_charge;
 		
 
 		total = total.toFixed(2);
@@ -4409,10 +4474,18 @@ tableOperateModule.controller('printerOrderController', [ '$scope','$location','
 												}
 
 											}
-										}																							
-										if(!$scope.tableInfis_out==1){
+										}
+										/*alert($scope.tableInf.is_out)
+										alert(service_charge)
+										alert($scope.orderCashed)*/
+
+										if($scope.tableInf.is_out==0
+                                            &&service_charge!=null
+                                            &&service_charge!=0
+                                            &&$scope.orderCashed==1)
+										{
 											top+=6;		
-											LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","服务费");											
+											LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","一元换购");
 											LODOP.ADD_PRINT_TEXT(top+"mm","55%","100%","4mm",service_charge);
 											LODOP.ADD_PRINT_TEXT(top+"mm","67%","100%","4mm","1");
 											LODOP.ADD_PRINT_TEXT(top+"mm","79%","100%","4mm",service_charge);
@@ -4437,8 +4510,8 @@ tableOperateModule.controller('printerOrderController', [ '$scope','$location','
 										top+=4;
 										LODOP.ADD_PRINT_TEXT(top+"mm","1mm","100%","4mm","联系方式:"+shop.phone);
 										//dev																		
-									    //LODOP.PREVIEW();									    									   									   					
-										LODOP.PRINT();	
+									    //LODOP.PREVIEW();
+										LODOP.PRINT();
 										window.location.reload()
 									}else{
 										alert("对应名称打印设备不存在");

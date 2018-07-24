@@ -333,9 +333,23 @@ syncService.factory('syncService', function ($resource) {
                 'X-Auth-Token': localStorage.getItem('token')
             }
         },
+        lotterySyncList_remote: {
+            method: 'GET',
+            url: remoteApiHost + '/lottery/shop/'+localStorage.getItem('shop_id')+'/isUpload/:id',
+            headers: {
+                'X-Auth-Token': localStorage.getItem('token')
+            }
+        },
         lotteryInsertById_remote:{
             method: 'POST',
             url: remoteApiHost+'/lottery/id',
+            headers: {
+                'X-Auth-Token': localStorage.getItem('token')
+            }
+        },
+        lotteryInsertById_local:{
+            method: 'POST',
+            url: apiHost+'/lottery/id',
             headers: {
                 'X-Auth-Token': localStorage.getItem('token')
             }
@@ -344,6 +358,14 @@ syncService.factory('syncService', function ($resource) {
             method: 'PUT',
             param:{id:"@id"},
             url: apiHost+'/lottery/:id',
+            headers: {
+                'X-Auth-Token': localStorage.getItem('token')
+            }
+        },
+        lotteryUpdateSync_status_remote:{
+            method: 'PUT',
+            param:{id:"@id"},
+            url: remoteApiHost+'/lottery/:id',
             headers: {
                 'X-Auth-Token': localStorage.getItem('token')
             }

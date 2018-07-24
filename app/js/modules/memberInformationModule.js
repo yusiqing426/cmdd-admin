@@ -152,10 +152,9 @@ memberInformationModule.controller('memberRechargeController', [ '$scope', '$loc
 		var amount = $scope.member.amount;
 		$scope.member.amount = parseFloat($scope.member.giveAmount)+parseFloat($scope.member.amount);
 		$scope.member.balance += parseFloat($scope.member.amount);
-       // if ($scope.kitchen.member != syncStatus + 1) {
-        //    $scope.kitchen.member = syncStatus + 2;
-        //}
-		memberInformationService.update($scope.member,
+		console.log($scope.member)
+		memberInformationService.update(
+			$scope.member,
 			function(response){
 				if(response.code!=200){
 				  alert("充值失败");
@@ -249,7 +248,7 @@ memberInformationModule.controller('memberRechargeController', [ '$scope', '$loc
 								LODOP.PRINT();
 							
 							}else{
-								alert('orderLogListControllerM_$scope.getOrderLogListF_if(type=print)_PrinterService.viewF_ERRO');
+								alert('打印充值凭证失败!');
 							}
 						}
 					)									  				

@@ -1075,7 +1075,7 @@ function ($scope,$location,$routeParams, orderLogService,ProductService,DataUtil
 					
 						top+=6;
 						if(!$scope.tableInf.is_out==1){								
-							LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","服务费");											
+							LODOP.ADD_PRINT_TEXT(top+"mm",0,"100%","3mm","一元换购");
 							LODOP.ADD_PRINT_TEXT(top+"mm","55%","100%","4mm",shop.service_charge);
 							LODOP.ADD_PRINT_TEXT(top+"mm","67%","100%","4mm","1");
 							LODOP.ADD_PRINT_TEXT(top+"mm","79%","100%","4mm",shop.service_charge);

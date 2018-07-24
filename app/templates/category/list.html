@@ -10,7 +10,7 @@
     </ul>
 	<table ng-table="tableParams" class="table table-striped">
 		<thead>
-            <tr>
+            <tr><button ng-click="sync()" style="margin-left:1.2%;overflow: visible;background-color: #5CB75C;border-radius: 4px">同步云端数据</button>
                 <th><a ng-click="tableParams.sorting('id',(reverseSort = !reverseSort)?'asc':'desc')">编号</a></th>
                 <th><a ng-click="tableParams.sorting('sort',(reverseSort = !reverseSort)?'asc':'desc')">排序</a></th>
                 <th><a ng-click="tableParams.sorting('name',(reverseSort = !reverseSort)?'asc':'desc')">品类名称</a></th>

@@ -15,6 +15,16 @@ lotteryLogService.factory('lotteryLogService', function ($resource) {
             'X-Auth-Token': localStorage.getItem('token')
           }
       },
+
+    queryByOrderId:{
+        method:'GET',
+        url:apiHost+'/lottery-order/:id',
+        params: {id: '@id'},
+        isArray: false,
+        headers: {
+            'X-Auth-Token': localStorage.getItem('token')
+        }
+    },
     create: {
       method: 'POST',
       headers: {

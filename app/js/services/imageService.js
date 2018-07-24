@@ -30,6 +30,17 @@ imageService.factory('ImageService', function($timeout, $upload) {
           },
           file: file
         })
+      },
+      uploadShopInfoCode: function(url, file) {
+          return $upload.upload({
+              url: apiHost+url,
+              method: 'POST',
+              headers: {
+                  'Content-Type': file.type,
+                  'X-Auth-Token': localStorage.getItem('token')
+              },
+              file: file
+          })
       }
   };
 });

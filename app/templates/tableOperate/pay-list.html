@@ -54,9 +54,10 @@
 		  <td class="text-center" ng-if="product.status_id==6">已退菜</td>
 		  <td class="text-center" ng-if="product.status_id==7">已断货</td>
 		</tr>
-		<tr ng-if="tableInf.is_out==0&&service_charge!=null&&service_charge!=0">
+
+		<tr ng-if="tableInf.is_out==0&&service_charge!=null&&service_charge!=0&&orderCashed==1">
           <td class="text-center">{{orderDetail.loi.length+1}}</td>
-          <td class="text-center">服务费</td>
+          <td class="text-center">一元乐购</td>
           <td class="text-center">1</td>
           <td class="text-center">份</td>
           <td class="text-center">￥{{service_charge.toFixed(2)}}</td>

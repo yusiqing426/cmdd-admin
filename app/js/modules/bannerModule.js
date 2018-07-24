@@ -108,15 +108,17 @@ bannerModule.controller('bannerCreateController', [ '$scope', '$location','Image
 			}
 		});
 
-      BannerService.create($scope.banner,
+
+      BannerService.create(
+      		$scope.banner,
             function (response) {
-              if(response.code != 200){
-                $scope.warnMessage = response.msg;
-              }
-              else{
-				  alert("创建成功")
-                $location.path('/Bannerdataentry/banner')
-              }
+				  if(response.code != 200){
+					$scope.warnMessage = response.msg;
+				  }
+				  else{
+					  alert("创建成功")
+					$location.path('/Bannerdataentry/banner')
+				  }
             }
           )
     }

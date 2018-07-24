@@ -62,7 +62,7 @@ shopInformationModule.controller('shopInformationCreateController', [ '$scope', 
       $scope.imageFile = files[0]
     }
 
-    $scope.create = function () {
+        $scope.create = function () {
 		/*
 		var reg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
 		if(!reg.test($scope.shop.phone)){
@@ -70,29 +70,60 @@ shopInformationModule.controller('shopInformationCreateController', [ '$scope', 
 			return;
 		}
 		*/
-      $scope.shop.agent_id = localStorage.getItem('id');
-      $scope.shop.user_key = "3,4,5,6";
-
-      ImageService.uploadImageToServer('/image', $scope.imageFile).then(
-        function(ress){
-            $scope.shop.pay_code_id = ress.data.msg.image_id;
-             shopInformationService.create($scope.shop,
-               function(response){
-                        if(response.code!=200){
-                          alert(response.msg);
-                return;
-                        }else{
-                alert("创建成功")
-                var url = '#/shopDataentry/shopPay/Parameters?id='+response.msg.shop_id;
-                window.location.href = url;
-                     }
+		$scope.shop.agent_id = localStorage.getItem('id');
+        $scope.shop.user_key = "3,4,5,6";
+        var imageChanged = false;
+        $scope.addImage = function (files) {
+            ImageService.generateThumb(files[0]);
+            $scope.imageFile = files[0];
+            imageChanged= true;
+        }
+            if($scope.imageFile == null || imageChanged==false){
+            shopInformationService.create(
+                $scope.shop,
+                function (response) {
+                    if(response.code!=200){
+                        alert(response.msg);
+                        return;
+                    }
+                    alert("创建成功");
+                    var url = '#/shopDataentry/shopPay/Parameters?id='+response.msg.shop_id;
+                    window.location.href = url;
                 }
-             )
+            )
+        }else{
+
+            ImageService.uploadShopInfoCode('/image', $scope.imageFile)
+                            .then(
+                                function(response){
+                                    $scope.shop.shop_code_id = response.data.msg.image_id;
+                                    shopInformationService.create(
+                                        $scope.shop,
+                                        function(response){
+                                            if(response.code!=200){
+                                                alert(response.msg);
+                                                return;
+                                            }else{
+                                                alert("创建成功");
+
+                                                var url = '#/shopDataentry/shopPay/Parameters?id='+response.msg.shop_id;
+                                                localStorage.setItem("shop_id",response.msg.shop_id)
+
+                                                ImageService.uploadImageToServer('/image?id='+$scope.shop.shop_code_id,$scope.imageFile).then(
+                                                    function(response){
+
+                                                    }
+                                                )
+
+                                                window.location.href = url;
+                                            }
+                                        }
+                                    )
             
-          }
-      )
+                                }
+                            )
 
-
+        }
     }
 
 }])
@@ -108,7 +139,7 @@ shopInformationModule.controller('shopInformationController', [ '$scope', '$loca
     shopInformationService.view({id:shopInformationId},function(response){
       $scope.shop=response.msg;
       var img = {
-          'dataUrl': apiHost + '/image/' + $scope.shop.pay_code_id
+          'dataUrl': apiHost + '/image/' + $scope.shop.shop_code_id
         }
         $scope.imageFile = img
     })
@@ -143,19 +174,20 @@ shopInformationModule.controller('shopInformationController', [ '$scope', '$loca
     if($scope.imageFile == null || imageChanged==false){      
       updateShop();
     }else{
-      if($scope.shop.pay_code_id==null){
+      if($scope.shop.shop_code_id==null){
           ImageService.uploadImageToServer('/image', $scope.imageFile).then(
-            function(ress){
-              $scope.shop.pay_code_id = ress.data.msg.image_id;
+            function(response){
+              $scope.shop.shop_code_id = response.data.msg.image_id;
               updateShop();
             })
       }else{
-          ImageService.uploadImageToServer('/image?id='+$scope.shop.pay_code_id,$scope.imageFile).then(
-              function(ress){
-                $scope.shop.pay_code_id = ress.data.msg.image_id;
+          ImageService.uploadImageToServer('/image?id='+$scope.shop.shop_code_id,$scope.imageFile).then(
+              function(response){
+                $scope.shop.shop_code_id = response.data.msg.image_id;
                 updateShop();
               }
           )
+
       }
 
     }

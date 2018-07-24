@@ -1,11 +1,12 @@
 'use strict'
+
+
 var isRemote = false;
 
-var apiHost ="http://localhost:8082/api"
-//var apiHost = "http://127.0.0.1:8082/api"
-
+var apiHost ="http://local_net_ip:8082/api"
 var remoteApiHost = "http://47.94.101.5:8080/api"
-//var remoteApiHost = "http://127.0.0.1:8081/cmdd"
+
+
 
 var loginApp = angular.module('loginApp', [
     'ngRoute',
@@ -17,10 +18,13 @@ var loginApp = angular.module('loginApp', [
     'categoryService',
     'productService',
     'shopInformationService',
-    'syncService'
+    'syncService',
+    'imagedExeService',
+    'ipService',
+    'bannerService'
 ])
 
 loginApp.run(function ($rootScope) {
-  $rootScope.apiHost = isRemote?apiHost:remoteApiHost;
-  $rootScope.isRemote = isRemote;
+    $rootScope.apiHost = isRemote?apiHost:remoteApiHost;
+    $rootScope.isRemote = isRemote;
 })

@@ -1,21 +1,14 @@
 'use strict'
 
+
+
 var isRemote = false;
 
-var apiHost ="http://localhost:8082/api"
+
+
+var apiHost ="http://local_net_ip:8082/api"
 
 var remoteApiHost = "http://47.94.101.5:8080/api"
-//var remoteApiHost = "http://127.0.0.1:8081/cmdd"
-//var apiHost = "http://47.92.82.105/api"
-//var apiHost = "http://192.168.1.108:9080/api"
-//var apiHost = "http://test-api.lbcy.com.cn/apid"
-//var apiHost = "http://test-admin.lbcy.com.cn:9080"
-
-
-
-
-
-//var apiHost = "http://cmdd-api.chanmaodd.com/apid"
 
 
 

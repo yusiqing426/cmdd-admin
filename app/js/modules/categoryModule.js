@@ -41,6 +41,57 @@ var categoryModule = angular.module('categoryModule', ['ngTable', 'checklist-mod
 					}
 				)
 			}
+			$scope.sync = function(){
+				var isConfirm = confirm("是否同步菜品类别数据");
+				if(!isConfirm)return
+				CategoryService.syncList(
+					{id:30},
+
+					function(response1){
+						//TODO 后端定义 arr.size的状态
+
+						if(response1.code==200&&response1.msg.length>0){
+
+							console.log("category --- response1")
+							console.log(response1)
+
+							var things = response1.msg;
+                            $scope.categoryList =things;
+
+							for (var i = 0; i < things.length; i++) {
+
+								things[i].sync_status = 1;
+
+								CategoryService.saveById(
+									things[i],
+									function (response2) {
+									}
+								)
+
+								var thing = {
+									id:things[i].id,
+									sync_status:1
+								}
+								CategoryService.remoteUpdate(
+									thing,
+									function(response3){
+										//console.log("category --- response3")
+										//console.log(response3)
+
+									}
+								)
+
+
+							}
+							//TODO:异步数据延迟
+							//logininit();
+
+						}else{
+							console.log("CategoryService---请求异常或集合数据为空")
+						}
+					}
+				)
+			}
 		} 
 	])
 

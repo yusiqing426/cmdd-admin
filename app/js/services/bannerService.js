@@ -70,6 +70,13 @@ bannerService.factory('BannerService', function ($resource) {
       headers: {
         'X-Auth-Token': localStorage.getItem('token')
       }
-    }
+    },
+      saveById: {
+          method: 'POST',
+          url: apiHost + '/banner_shop/id',
+          headers: {
+              'X-Auth-Token': localStorage.getItem('token')
+          }
+      },
   })
 })
